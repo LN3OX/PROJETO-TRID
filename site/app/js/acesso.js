@@ -9,7 +9,7 @@
     tela = document.createElement('div');
     tela.className = 'acesso'; tela.id = 'acessoPendente'; tela.hidden = true;
     tela.setAttribute('role', 'alertdialog'); tela.setAttribute('aria-modal', 'true'); tela.setAttribute('aria-labelledby', 'acessoTitulo');
-    tela.innerHTML = '<div class="acesso-card"><img class="logo-light" src="./img/logo-projeto-trid-colorido.svg" alt="Projeto Trid"><img class="logo-dark" src="./img/logo-projeto-trid-escuro.svg" alt="Projeto Trid">' +
+    tela.innerHTML = '<div class="acesso-card"><img class="logo-light" src="./img/logo-trid-claro.png" alt="Projeto Trid"><img class="logo-dark" src="./img/logo-trid-escuro.png" alt="Projeto Trid">' +
       '<h1 id="acessoTitulo"></h1><p class="acesso-texto" id="acessoTexto"></p>' +
       '<div class="acesso-botoes"><button type="button" class="btn btn-primary" id="acessoVerificar">Verificar de novo</button><button type="button" class="btn btn-outline" id="acessoSair">Sair</button></div></div>';
     document.body.append(tela);
@@ -53,8 +53,8 @@
   if (document.readyState === 'complete') setTimeout(inicial, 0); else window.addEventListener('load', () => setTimeout(inicial, 0));
   // tela de login: a peça de demonstração gira ao lado do preço (só no computador, onde a coluna aparece; carrega sob demanda)
   const pecaLogin = document.querySelector('[data-login-peca]');
-  if (pecaLogin && matchMedia('(min-width: 900px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const montarPeca = () => { if (getComputedStyle(pecaLogin).display === 'none' || pecaLogin.dataset.pronta) return; pecaLogin.dataset.pronta = '1'; import('../assets/logo3d.js').then((m) => m.criarPeca(pecaLogin, { paleta: 'marca', velocidade: 1.4 })).catch(() => { /* sem a peça, o quadro continua com o preço */ }); };
+  if (pecaLogin && matchMedia('(min-width: 900px)').matches) {
+    const montarPeca = () => { if (getComputedStyle(pecaLogin).display === 'none' || pecaLogin.dataset.pronta) return; pecaLogin.dataset.pronta = '1'; const img = new Image(); img.src = './img/logo-trid-simbolo.png'; img.alt = ''; img.decoding = 'async'; pecaLogin.replaceChildren(img); };
     if (document.readyState === 'complete') setTimeout(montarPeca, 300); else window.addEventListener('load', () => setTimeout(montarPeca, 300));
   }
   document.addEventListener('projetotrid:auth', () => { if (app()?.user()) verificar(); else { verificando++; esconder(); } });

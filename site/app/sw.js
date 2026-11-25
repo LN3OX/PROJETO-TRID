@@ -1,4 +1,4 @@
-const CACHE_NAME='projetotrid-v107';
+const CACHE_NAME='projetotrid-v108';
 const KIRI_CACHE='projetotrid-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
 const APP_SHELL=[
   './',
@@ -20,12 +20,10 @@ const APP_SHELL=[
   './icons/apple-touch-icon.png',
   './fonts/outfit-latin-wght-normal.woff2',
   './img/projeto-trid-mark.png',
-  './img/logo-projeto-trid-colorido.svg',
-  './img/logo-projeto-trid-escuro.svg',
-  './img/logo-3d-colorido.svg',
-  './img/logo-3d-escuro.svg',
-  './img/logo-3d-uma-cor-grafite.svg',
-  './img/logo-3d-uma-cor-papel.svg',
+  './img/logo-trid-claro.png',
+  './img/logo-trid-escuro.png',
+  './img/logo-trid-simbolo.png',
+  './icons/favicon.png',
   './img/qrcode-instagram.png',
   './img/qrcode-pix.png',
   './templates/whatsapp-template.html',

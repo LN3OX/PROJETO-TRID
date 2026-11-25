@@ -1,38 +1,34 @@
-// Identidade visual: o meio das letras "3D" (e não o bico) é o centro da logo e dos ícones.
+// Identidade visual: logo "TRID" com o símbolo de cubos vermelhos e grafite, centralizado nos ícones.
 const { test, expect } = require('@playwright/test');
 
-// centro vertical das letras coloridas (o bico é grafite/papel, sem cor), em fração da altura da imagem
+// centro (vertical e horizontal) das partes vermelhas do símbolo, em fração do tamanho da imagem
 const medir = (page, url, largura) => page.evaluate(async ([u, w]) => {
   const img = new Image(); img.src = u; await img.decode();
   const c = document.createElement('canvas'), h = Math.round((w * img.naturalHeight) / img.naturalWidth); c.width = w; c.height = h;
   const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, w, h);
-  const d = x.getImageData(0, 0, w, h).data; let min = h, max = 0;
-  for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) { const k = (y * w + i) * 4, r = d[k], g = d[k + 1], b = d[k + 2]; if (d[k + 3] > 200 && Math.max(r, g, b) - Math.min(r, g, b) > 80) { if (y < min) min = y; if (y > max) max = y; } }
-  return { centro: (min + max) / 2 / h, topo: min / h, base: max / h };
+  const d = x.getImageData(0, 0, w, h).data; let y0 = h, y1 = 0, x0 = w, x1 = 0;
+  for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) { const k = (y * w + i) * 4, r = d[k], g = d[k + 1], b = d[k + 2]; if (d[k + 3] > 200 && r > 150 && r - Math.max(g, b) > 100) { y0 = Math.min(y0, y); y1 = Math.max(y1, y); x0 = Math.min(x0, i); x1 = Math.max(x1, i); } }
+  return { cy: (y0 + y1) / 2 / h, cx: (x0 + x1) / 2 / w };
 }, [url, largura]);
 
 test.describe('identidade visual', () => {
-  for (const [arq, larg] of [['/app/img/logo-3d-colorido.svg', 600], ['/app/img/logo-3d-escuro.svg', 600], ['/app/icons/icon-512.png', 512], ['/app/icons/icon-192.png', 192], ['/app/icons/apple-touch-icon.png', 180], ['/app/img/projeto-trid-mark.png', 512]]) {
-    test(`o meio do "3D" é o centro: ${arq}`, async ({ page }) => {
+  for (const [arq, larg] of [['/app/icons/icon-512.png', 512], ['/app/icons/icon-192.png', 192], ['/app/icons/apple-touch-icon.png', 180], ['/app/icons/favicon.png', 64], ['/app/img/projeto-trid-mark.png', 512]]) {
+    test(`o símbolo de cubos fica no centro: ${arq}`, async ({ page }) => {
       await page.goto('/app/');
       const m = await medir(page, arq, larg);
-      expect(Math.abs(m.centro - 0.5), `meio do 3D em ${(m.centro * 100).toFixed(1)}%`).toBeLessThan(0.025);
+      expect(Math.abs(m.cy - 0.5), `centro vertical em ${(m.cy * 100).toFixed(1)}%`).toBeLessThan(0.04);
+      expect(Math.abs(m.cx - 0.5), `centro horizontal em ${(m.cx * 100).toFixed(1)}%`).toBeLessThan(0.04);
     });
   }
 
-  test('ícone do site (SVG) tem o meio do "3D" no centro', async ({ page }) => {
-    await page.goto('/app/');
-    const m = await medir(page, '/app/icons/icon.svg', 512);
-    expect(Math.abs(m.centro - 0.5)).toBeLessThan(0.025);
-  });
-
-  test('as logos 3D têm a proporção nova (mais altas que largas) e as de nome seguem iguais', async ({ page }) => {
+  test('o símbolo é mais alto que largo e a logo com nome é horizontal', async ({ page }) => {
     await page.goto('/app/');
     const r = await page.evaluate(async () => {
       const dim = async (u) => { const i = new Image(); i.src = u; await i.decode(); return i.naturalWidth / i.naturalHeight; };
-      return { tres: await dim('/app/img/logo-3d-colorido.svg'), nome: await dim('/app/img/logo-projeto-trid-colorido.svg') };
+      return { simbolo: await dim('/app/img/logo-trid-simbolo.png'), claro: await dim('/app/img/logo-trid-claro.png'), escuro: await dim('/app/img/logo-trid-escuro.png') };
     });
-    expect(r.tres).toBeLessThan(1);
-    expect(r.nome).toBeGreaterThan(4);
+    expect(r.simbolo).toBeLessThan(1);
+    expect(r.claro).toBeGreaterThan(3);
+    expect(r.escuro).toBeCloseTo(r.claro, 2);
   });
 });
