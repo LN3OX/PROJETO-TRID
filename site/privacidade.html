@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Política de privacidade | Projeto Trid</title>
+<meta name="description" content="Como o Projeto Trid coleta, usa e protege os dados de quem usa o sistema de orçamentos de impressão 3D.">
+<link rel="icon" href="./app/icons/icon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#fff8ef">
+<style>
+:root{--bg:#fff8ef;--card:#ffffff;--ink:#1e1b13;--muted:#4c4635;--line:#cfc6af;--accent:#b91e14;--mark:#ffdad5;--mark-ink:#410000}
+@media (prefers-color-scheme:dark){:root{--bg:#16130b;--card:#221f17;--ink:#e9e2d4;--muted:#cfc6af;--line:#4c4635;--accent:#ffb4a9;--mark:#5c1009;--mark-ink:#ffdad5}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Outfit,'Segoe UI',Arial,system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:32px 16px 64px}
+header a{color:var(--accent);text-decoration:none;font-weight:500}
+header a:hover{text-decoration:underline}
+h1{font-size:2rem;line-height:1.25;font-weight:600;margin:24px 0 4px}
+.atualizado{color:var(--muted);margin:0 0 24px}
+section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 20px 8px;margin:0 0 16px}
+h2{font-size:1.2rem;font-weight:600;margin:0 0 8px}
+p,li{margin:0 0 12px}
+ul{padding-left:22px;margin:0 0 12px}
+a{color:var(--accent)}
+mark.preencher{background:var(--mark);color:var(--mark-ink);padding:0 4px;border-radius:4px}
+footer{color:var(--muted);font-size:.875rem;text-align:center;margin-top:32px}
+</style>
+</head>
+<body>
+<main>
+  <header><a href="./app/">← Voltar ao Projeto Trid</a></header>
+
+  <h1>Política de privacidade</h1>
+  <p class="atualizado">Última atualização: 25 de novembro de 2026</p>
+
+  <section>
+    <h2>1. Quem somos</h2>
+    <p>O Projeto Trid é um sistema on-line para criar orçamentos de impressão 3D, organizar clientes, pedidos, estoque de filamento e impressoras. O responsável pelo sistema e pelos dados tratados nele é <mark class="preencher">[NOME DO RESPONSÁVEL]</mark>.</p>
+    <p>Esta política explica quais dados coletamos, para que usamos e quais são os seus direitos, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018, LGPD).</p>
+  </section>
+
+  <section>
+    <h2>2. Dados que coletamos</h2>
+    <p><strong>Ao entrar com o Google:</strong> recebemos do Google apenas o seu nome, e-mail e foto de perfil. Usamos esses dados só para criar e identificar a sua conta. Não temos acesso à sua senha do Google, aos seus e-mails, contatos, arquivos ou a qualquer outro dado da sua conta Google.</p>
+    <p><strong>Dados que você cadastra no sistema:</strong></p>
+    <ul>
+      <li>clientes: nome, e-mail, telefone e observações que você anotar;</li>
+      <li>orçamentos e pedidos: peças, quantidades, materiais, valores, descontos, status e prazos;</li>
+      <li>histórico de impressões: nome da peça, material, peso, tempo, custos e os arquivos 3D (STL/3MF) que você enviar;</li>
+      <li>estoque de filamento e impressoras: materiais, cores, marcas, quantidades, horas de uso e registros de manutenção;</li>
+      <li>vitrine: nome da loja, texto de apresentação, WhatsApp de contato, fotos e preços das peças que você decidir mostrar.</li>
+    </ul>
+    <p><strong>Resposta do seu cliente a um orçamento:</strong> quando você envia o link de aprovação, o cliente pode aprovar ou pedir ajuste e deixar uma observação. Guardamos essa resposta junto ao orçamento.</p>
+    <p><strong>No seu navegador:</strong> guardamos a preferência de tema (claro ou escuro) e uma cópia do aplicativo para ele abrir mais rápido e funcionar sem internet. Não usamos cookies de publicidade nem ferramentas de rastreamento.</p>
+  </section>
+
+  <section>
+    <h2>3. Para que usamos os dados</h2>
+    <ul>
+      <li>permitir o seu acesso à conta e liberar o uso do sistema;</li>
+      <li>guardar e mostrar a você os seus orçamentos, clientes, pedidos e demais registros;</li>
+      <li>gerar os links de aprovação e a página da vitrine, quando você usa esses recursos.</li>
+    </ul>
+    <p>Não vendemos, alugamos nem compartilhamos dados com terceiros para publicidade. O uso das informações recebidas das APIs do Google segue a <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">Política de Dados do Usuário dos Serviços de API do Google</a>, incluindo os requisitos de Uso Limitado.</p>
+  </section>
+
+  <section>
+    <h2>4. Quem pode ver os dados</h2>
+    <ul>
+      <li>Cada conta só vê os próprios dados. Isso é garantido por regras de acesso no banco de dados.</li>
+      <li>O cliente que recebe um link de aprovação vê apenas o resumo daquele orçamento: peças, quantidades, materiais, cores, preço unitário e total. Ele não vê custos nem outros orçamentos.</li>
+      <li>A vitrine é pública: tudo o que você marcar para aparecer nela pode ser visto por qualquer pessoa com o link.</li>
+      <li>O responsável pelo sistema pode ver quais e-mails pediram acesso, para aprovar ou bloquear contas.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Onde os dados ficam</h2>
+    <p>Os dados e arquivos ficam no <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">Supabase</a>, serviço de banco de dados e armazenamento usado pelo sistema. O site é hospedado no GitHub Pages. Esses serviços podem manter servidores fora do Brasil; nesse caso, a transferência é feita para viabilizar o funcionamento do sistema, com as proteções previstas na LGPD.</p>
+    <p>A comunicação com o sistema é sempre criptografada (HTTPS).</p>
+  </section>
+
+  <section>
+    <h2>6. Por quanto tempo guardamos</h2>
+    <p>Guardamos os dados enquanto a sua conta existir. Você pode apagar clientes, orçamentos, impressões e arquivos a qualquer momento pelo próprio sistema. Se pedir a exclusão da conta, apagamos a conta e todos os dados ligados a ela, exceto o que a lei nos obrigar a manter.</p>
+  </section>
+
+  <section>
+    <h2>7. Seus direitos</h2>
+    <p>Pela LGPD, você pode pedir a qualquer momento:</p>
+    <ul>
+      <li>confirmação de que tratamos seus dados e acesso a eles;</li>
+      <li>correção de dados incompletos ou errados;</li>
+      <li>exclusão dos dados ou da conta;</li>
+      <li>cópia dos seus dados (portabilidade);</li>
+      <li>informações sobre com quem os dados são compartilhados.</li>
+    </ul>
+    <p>Se você cadastrou dados de clientes no sistema, você é responsável por informá-los e por ter uma base legal para isso. Clientes que quiserem exercer seus direitos podem falar com você ou conosco.</p>
+  </section>
+
+  <section>
+    <h2>8. Contato</h2>
+    <p>Para dúvidas, pedidos de acesso, correção ou exclusão, escreva para <mark class="preencher">[E-MAIL DE CONTATO]</mark>. Respondemos em até 15 dias.</p>
+  </section>
+
+  <section>
+    <h2>9. Mudanças nesta política</h2>
+    <p>Se esta política mudar, a nova versão será publicada nesta página com a data de atualização.</p>
+  </section>
+
+  <footer>Projeto Trid · <a href="./app/">Abrir o sistema</a></footer>
+</main>
+</body>
+</html>
