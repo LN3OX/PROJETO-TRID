@@ -1,17 +1,17 @@
-/* Inventta 3D · Painel do mês: quanto foi orçado, lucro estimado, filamento e horas orçados, pedidos registrados,
+/* Projeto Trid · Painel do mês: quanto foi orçado, lucro estimado, filamento e horas orçados, pedidos registrados,
    peças mais pedidas e clientes que mais orçaram. Lê orçamentos e o histórico de impressões; não grava nada.
    Núcleo puro (testado em tests/painel.test.cjs) + tela. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaPainel = api;
+  else raiz.ProjetoTridPainel = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   const FECHADOS = ['aprovado', 'fila', 'imprimindo', 'acabamento', 'pronto', 'entregue'];
   const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
   const noMes = (iso, ano, mes) => { const d = new Date(iso); return d.getFullYear() === ano && d.getMonth() === mes; };
   const top = (mapa, n = 5) => [...mapa].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'pt-BR')).slice(0, n);
 
-  // calc = InventtaCalculations (calculate + printDurationHours)
+  // calc = ProjetoTridCalculations (calculate + printDurationHours)
   function resumoMes(orcamentos, impressoes, ano, mes, calc) {
     const doMes = orcamentos.filter((o) => noMes(o.created_at, ano, mes));
     let valor = 0, lucro = 0, gramas = 0, horas = 0, fechado = 0, fechados = 0;
@@ -59,7 +59,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const P = window.InventtaPainel, $ = (id) => document.getElementById(id), app = () => window.InventtaApp;
+  const P = window.ProjetoTridPainel, $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp;
   if (!$('dashBody')) return;
   const ROTA = '#/painel', NOMES = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
   const real = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -132,8 +132,8 @@
     const corpo = $('dashBody');
     corpo.replaceChildren();
     if (!carregado) return;
-    const r = P.resumoMes(orcs, imps, ano, mes, window.InventtaCalculations);
-    const pa = mes === 0 ? ano - 1 : ano, pm = mes === 0 ? 11 : mes - 1, ant = P.resumoMes(orcs, imps, pa, pm, window.InventtaCalculations);
+    const r = P.resumoMes(orcs, imps, ano, mes, window.ProjetoTridCalculations);
+    const pa = mes === 0 ? ano - 1 : ano, pm = mes === 0 ? 11 : mes - 1, ant = P.resumoMes(orcs, imps, pa, pm, window.ProjetoTridCalculations);
     const comp = (a, b) => ({ atual: a, anterior: b, mesAnterior: NOMES[pm] });
     const kpis = el('div', 'dash-kpis');
     kpis.append(
@@ -153,7 +153,7 @@
 
   $('dashPrev').addEventListener('click', () => { mes--; if (mes < 0) { mes = 11; ano--; } desenhar(); });
   $('dashNext').addEventListener('click', () => { mes++; if (mes > 11) { mes = 0; ano++; } desenhar(); });
-  document.addEventListener('inventta:auth', () => { carregado = false; if (location.hash === ROTA) carregar(); });
+  document.addEventListener('projetotrid:auth', () => { carregado = false; if (location.hash === ROTA) carregar(); });
   window.addEventListener('hashchange', () => { if (location.hash === ROTA) carregar(); });
   if (location.hash === ROTA) carregar(); else desenhar();
 })();

@@ -1,4 +1,4 @@
-/* Inventta 3D · módulo Impressões (usa só tokens; lista e vazio reaproveitam as classes de orçamentos salvos) */
+/* Projeto Trid · módulo Impressões (usa só tokens; lista e vazio reaproveitam as classes de orçamentos salvos) */
 .print-dialog .preview-body{display:grid;gap:16px;align-content:start}
 .print-dialog h3{margin:8px 0 0;font:var(--md-sys-typescale-title-medium)}
 .print-intro{margin:0;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium)}

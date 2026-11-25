@@ -1,10 +1,10 @@
-/* Inventta 3D · vitrine pública (vitrine.html?loja=<endereço>). Sem login.
+/* Projeto Trid · vitrine pública (vitrine.html?loja=<endereço>). Sem login.
    Lê pela função inventta3d_showcase (só peças marcadas: nome, material, cor, preço, descrição e foto).
    "Quero uma igual" abre o WhatsApp da loja; nada é gravado pelo visitante. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaVitrineNucleo = api;
+  else raiz.ProjetoTridVitrineNucleo = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   const slugValido = (s) => /^[a-z0-9](?:[a-z0-9-]{1,38})[a-z0-9]$/.test(String(s || ''));
   const paraSlug = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
@@ -15,7 +15,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const $ = (id) => document.getElementById(id), V = window.InventtaVitrineNucleo;
+  const $ = (id) => document.getElementById(id), V = window.ProjetoTridVitrineNucleo;
   if (!$('vitMain')) return;
   const loja = new URLSearchParams(location.search).get('loja') || '';
   const real = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -30,7 +30,7 @@
     const { data: v, error } = await cliente.rpc('inventta3d_showcase', { p_slug: loja });
     if (error) return aviso('Não foi possível abrir', 'Verifique sua conexão e atualize a página.');
     if (!v) return aviso('Vitrine não encontrada', 'Ela pode estar desativada. Confira o endereço com a loja.');
-    document.title = `${v.name || 'Vitrine'} | Inventta 3D`;
+    document.title = `${v.name || 'Vitrine'} | Projeto Trid`;
     $('vitTitle').textContent = v.name || 'Vitrine';
     $('vitIntro').textContent = v.intro || 'Peças impressas em 3D sob encomenda.';
     const grade = $('vitGrid');

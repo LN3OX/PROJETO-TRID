@@ -12,7 +12,7 @@ const medir = (page, url, largura) => page.evaluate(async ([u, w]) => {
 }, [url, largura]);
 
 test.describe('identidade visual', () => {
-  for (const [arq, larg] of [['/app/img/logo-3d-colorido.svg', 600], ['/app/img/logo-3d-escuro.svg', 600], ['/app/icons/icon-512.png', 512], ['/app/icons/icon-192.png', 192], ['/app/icons/apple-touch-icon.png', 180], ['/app/img/inventta-3d-mark.png', 512]]) {
+  for (const [arq, larg] of [['/app/img/logo-3d-colorido.svg', 600], ['/app/img/logo-3d-escuro.svg', 600], ['/app/icons/icon-512.png', 512], ['/app/icons/icon-192.png', 192], ['/app/icons/apple-touch-icon.png', 180], ['/app/img/projeto-trid-mark.png', 512]]) {
     test(`o meio do "3D" é o centro: ${arq}`, async ({ page }) => {
       await page.goto('/app/');
       const m = await medir(page, arq, larg);
@@ -30,7 +30,7 @@ test.describe('identidade visual', () => {
     await page.goto('/app/');
     const r = await page.evaluate(async () => {
       const dim = async (u) => { const i = new Image(); i.src = u; await i.decode(); return i.naturalWidth / i.naturalHeight; };
-      return { tres: await dim('/app/img/logo-3d-colorido.svg'), nome: await dim('/app/img/logo-inventta-3d-colorido.svg') };
+      return { tres: await dim('/app/img/logo-3d-colorido.svg'), nome: await dim('/app/img/logo-projeto-trid-colorido.svg') };
     });
     expect(r.tres).toBeLessThan(1);
     expect(r.nome).toBeGreaterThan(4);

@@ -1,8 +1,8 @@
-/* Inventta 3D · vitrine, lado do dono: aba "Vitrine" em Impressões (dados da loja e link público)
+/* Projeto Trid · vitrine, lado do dono: aba "Vitrine" em Impressões (dados da loja e link público)
    e a seção "Vitrine" nos detalhes de cada peça (mostrar, preço, descrição e foto).
-   impressoes.js chama InventtaVitrine.secao(peça, aoSalvar) ao abrir os detalhes. */
+   impressoes.js chama ProjetoTridVitrine.secao(peça, aoSalvar) ao abrir os detalhes. */
 (() => {
-  const $ = (id) => document.getElementById(id), app = () => window.InventtaApp, V = window.InventtaVitrineNucleo;
+  const $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp, V = window.ProjetoTridVitrineNucleo;
   if (!$('shopForm') || !V) return;
   const BUCKET = 'inventta3d-vitrine', MAX_FOTO = 5 * 1024 * 1024;
   const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
@@ -89,8 +89,8 @@
   $('shopSlug').addEventListener('input', () => { const v = V.paraSlug($('shopSlug').value); if (v !== $('shopSlug').value) $('shopSlug').value = v; mostrarLink(); });
   $('shopName').addEventListener('change', () => { if (!$('shopSlug').value) { $('shopSlug').value = V.paraSlug($('shopName').value); mostrarLink(); } });
   $('shopCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText($('shopLink').textContent); app().status('Link da vitrine copiado.'); } catch { app().status('Copie o link mostrado acima.', true); } });
-  document.addEventListener('inventta:auth', () => { carregada = false; carregar(); });
-  document.addEventListener('inventta:aba', (e) => { if (e.detail === 'panelVitrine' && !carregada) carregar(); });
+  document.addEventListener('projetotrid:auth', () => { carregada = false; carregar(); });
+  document.addEventListener('projetotrid:aba', (e) => { if (e.detail === 'panelVitrine' && !carregada) carregar(); });
   carregar();
-  window.InventtaVitrine = { secao, recarregar: carregar };
+  window.ProjetoTridVitrine = { secao, recarregar: carregar };
 })();

@@ -1,7 +1,7 @@
-/* Inventta 3D · aprovação de acesso. Quem entra pelo Google fica "pendente" até o dono aprovar (tabela inventta3d_access no Supabase).
+/* Projeto Trid · aprovação de acesso. Quem entra pelo Google fica "pendente" até o dono aprovar (tabela inventta3d_access no Supabase).
    O bloqueio de verdade está no banco (as regras das tabelas exigem aprovação); esta tela só explica o que está acontecendo. */
 (function () {
-  const app = () => window.InventtaApp;
+  const app = () => window.ProjetoTridApp;
   let tela = null, verificando = 0;
 
   function montar() {
@@ -9,7 +9,7 @@
     tela = document.createElement('div');
     tela.className = 'acesso'; tela.id = 'acessoPendente'; tela.hidden = true;
     tela.setAttribute('role', 'alertdialog'); tela.setAttribute('aria-modal', 'true'); tela.setAttribute('aria-labelledby', 'acessoTitulo');
-    tela.innerHTML = '<div class="acesso-card"><img class="logo-light" src="./img/logo-inventta-3d-colorido.svg" alt="Inventta 3D"><img class="logo-dark" src="./img/logo-inventta-3d-escuro.svg" alt="Inventta 3D">' +
+    tela.innerHTML = '<div class="acesso-card"><img class="logo-light" src="./img/logo-projeto-trid-colorido.svg" alt="Projeto Trid"><img class="logo-dark" src="./img/logo-projeto-trid-escuro.svg" alt="Projeto Trid">' +
       '<h1 id="acessoTitulo"></h1><p class="acesso-texto" id="acessoTexto"></p>' +
       '<div class="acesso-botoes"><button type="button" class="btn btn-primary" id="acessoVerificar">Verificar de novo</button><button type="button" class="btn btn-outline" id="acessoSair">Sair</button></div></div>';
     document.body.append(tela);
@@ -40,8 +40,8 @@
         if (aberto) location.reload(); // recarrega para buscar os dados agora que o acesso foi liberado
         return;
       }
-      if (data === 'blocked') mostrar('Acesso não liberado', `A conta ${usuario.email} não tem acesso ao Inventta 3D. Entre em contato com o responsável.`);
-      else mostrar('Aguardando aprovação', `Pedimos o acesso para ${usuario.email}. Assim que for aprovado, toque em "Verificar de novo". Se precisar de pressa, chame o responsável pelo Inventta 3D.`);
+      if (data === 'blocked') mostrar('Acesso não liberado', `A conta ${usuario.email} não tem acesso ao Projeto Trid. Entre em contato com o responsável.`);
+      else mostrar('Aguardando aprovação', `Pedimos o acesso para ${usuario.email}. Assim que for aprovado, toque em "Verificar de novo". Se precisar de pressa, chame o responsável pelo Projeto Trid.`);
     } catch {
       if (vez !== verificando) return;
       mostrar('Não foi possível verificar o acesso', 'Confira a conexão e tente de novo.');
@@ -57,5 +57,5 @@
     const montarPeca = () => { if (getComputedStyle(pecaLogin).display === 'none' || pecaLogin.dataset.pronta) return; pecaLogin.dataset.pronta = '1'; import('/assets/logo3d.js').then((m) => m.criarPeca(pecaLogin, { paleta: 'marca', velocidade: 1.4 })).catch(() => { /* sem a peça, o quadro continua com o preço */ }); };
     if (document.readyState === 'complete') setTimeout(montarPeca, 300); else window.addEventListener('load', () => setTimeout(montarPeca, 300));
   }
-  document.addEventListener('inventta:auth', () => { if (app()?.user()) verificar(); else { verificando++; esconder(); } });
+  document.addEventListener('projetotrid:auth', () => { if (app()?.user()) verificar(); else { verificando++; esconder(); } });
 })();

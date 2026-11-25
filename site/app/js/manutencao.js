@@ -1,11 +1,11 @@
-/* Inventta 3D · Impressoras e manutenção (aba "Impressoras" em Impressões).
+/* Projeto Trid · Impressoras e manutenção (aba "Impressoras" em Impressões).
    Horímetro: o valor informado + as horas dos pedidos registrados no histórico depois dele (só quando há uma
    impressora; com várias, cada uma é atualizada à mão). Tarefas com intervalo em horas avisam quando vencem.
    Núcleo puro (testado em tests/manutencao.test.cjs) + tela. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaManutencaoNucleo = api;
+  else raiz.ProjetoTridManutencaoNucleo = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   // ponytail: intervalos de referência comuns em impressoras FDM; ajustáveis por impressora
   const TAREFAS_PADRAO = [
@@ -37,7 +37,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const N = window.InventtaManutencaoNucleo, $ = (id) => document.getElementById(id), app = () => window.InventtaApp;
+  const N = window.ProjetoTridManutencaoNucleo, $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp;
   if (!$('printerList')) return;
   const COLS = 'id,name,model,hours,hours_at,tasks,log,created_at';
   const h1 = (n) => `${(Math.round(n * 10) / 10).toLocaleString('pt-BR')} h`;
@@ -164,6 +164,6 @@
   $('newPrinterBtn').addEventListener('click', () => abrir());
   $('printerForm').addEventListener('submit', salvar);
   $('printerCancel').addEventListener('click', () => $('printerDialog').close());
-  document.addEventListener('inventta:auth', () => { carregado = false; if (!$('panelMaquinas').hidden) carregar(); });
-  document.addEventListener('inventta:aba', (e) => { if (e.detail === 'panelMaquinas') carregar(); });
+  document.addEventListener('projetotrid:auth', () => { carregado = false; if (!$('panelMaquinas').hidden) carregar(); });
+  document.addEventListener('projetotrid:aba', (e) => { if (e.detail === 'panelMaquinas') carregar(); });
 })();

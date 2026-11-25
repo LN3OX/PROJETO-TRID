@@ -1,4 +1,4 @@
-# Inventta 3D: estrutura e novos módulos
+# Projeto Trid: estrutura e novos módulos
 
 ## Como o app está organizado
 

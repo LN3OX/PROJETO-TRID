@@ -1,7 +1,7 @@
 # Kiri:Moto (motor de fatiamento) — versão 4.7.3
 
 Arquivos copiados sem alteração de https://grid.space/lib/kiri/ (projeto https://github.com/GridSpace/grid-apps).
-Usados pelo Inventta 3D para calcular peso e tempo de STL/3MF no navegador.
+Usados pelo Projeto Trid para calcular peso e tempo de STL/3MF no navegador.
 
 Copyright 2014-2018 Stewart Allen <sa@grid.space>
 

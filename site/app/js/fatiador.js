@@ -6,7 +6,7 @@
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaFatiador = api;
+  else raiz.ProjetoTridFatiador = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   const DENSIDADE = { PLA: 1.24, PETG: 1.27, ABS: 1.04, ASA: 1.07, TPU: 1.21, TPE: 1.2, PC: 1.2, PA: 1.14, NYLON: 1.14, PVA: 1.23, HIPS: 1.04, PP: 0.9 };
   const densidade = (tipo) => { const t = String(tipo || '').toUpperCase(); const k = Object.keys(DENSIDADE).sort((a, b) => b.length - a.length).find((d) => t.startsWith(d)); return k ? DENSIDADE[k] : 1.24; };
@@ -300,7 +300,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const F = window.InventtaFatiador, $ = (id) => document.getElementById(id);
+  const F = window.ProjetoTridFatiador, $ = (id) => document.getElementById(id);
   const entrada = $('slicerFile'), status = $('slicerStatus');
   if (!entrada) return;
   const BORDA = 512 * 1024, aviso = (m) => Object.assign(new Error(m), { aviso: true });
@@ -312,8 +312,8 @@
   status.after(barra);
   let ultimo = 0;
   const progresso = (f) => { const agora = performance.now(); if (f < 1 && agora - ultimo < 80) return; ultimo = agora; barra.hidden = false; barra.value = f; status.textContent = `Lendo a peça… ${Math.round(f * 100)}%`; };
-  window.InventtaPecaImagem = () => (vis ? vis.imagem() : null); // PNG da peça em 3D, para o envio do orçamento (app.js)
-  window.InventtaPecaGif = (progresso) => (vis ? vis.gif(progresso) : null); // GIF girando, se o usuário quiser mandar junto
+  window.ProjetoTridPecaImagem = () => (vis ? vis.imagem() : null); // PNG da peça em 3D, para o envio do orçamento (app.js)
+  window.ProjetoTridPecaGif = (progresso) => (vis ? vis.gif(progresso) : null); // GIF girando, se o usuário quiser mandar junto
 
   // Na tela de preço o mesmo quadro do 3D aparece acima dos itens do pedido (mesma largura); ao voltar às etapas, volta ao lugar de origem.
   const resultado = $('result');
@@ -328,13 +328,13 @@
   async function mostrarPeca(placas) { // junta as placas e mostra em 3D, se o visualizador estiver no app
     const caixa = $('slicerView');
     vis?.fechar(); vis = null; caixa.hidden = true;
-    if (!placas || !window.InventtaVisualizador) return;
+    if (!placas || !window.ProjetoTridVisualizador) return;
     const tri = new Float32Array(placas.reduce((t, p) => t + p.tri.length, 0));
     const cores = placas.every((p) => p.cores) ? new Float32Array(tri.length) : null; // cores do projeto (3MF Bambu/Orca)
     let o = 0; for (const p of placas) { tri.set(p.tri, o); cores?.set(p.cores, o); o += p.tri.length; }
     caixa.hidden = false;
     // trocar a cor no 3D preenche "Cor do filamento", para o orçamento mostrar a mesma cor
-    try { vis = await window.InventtaVisualizador.mostrar(caixa, tri, { cor: $('filamentColor').value, nome: $('product').value || 'peça', aoTrocarCor: (nome) => preencher('filamentColor', nome), coresOriginais: cores }); } catch { caixa.hidden = true; }
+    try { vis = await window.ProjetoTridVisualizador.mostrar(caixa, tri, { cor: $('filamentColor').value, nome: $('product').value || 'peça', aoTrocarCor: (nome) => preencher('filamentColor', nome), coresOriginais: cores }); } catch { caixa.hidden = true; }
   }
 
   const preencher = (id, valor, evento = 'input') => { const el = $(id); el.value = valor; el.dispatchEvent(new Event(evento, { bubbles: true })); el.dispatchEvent(new Event('blur')); };

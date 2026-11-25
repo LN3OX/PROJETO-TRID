@@ -1,4 +1,4 @@
-/* Inventta 3D · vitrine pública (usa só tokens; base de aprovar.css) */
+/* Projeto Trid · vitrine pública (usa só tokens; base de aprovar.css) */
 .vit{box-sizing:border-box;width:min(1080px,100%);margin:0 auto;padding:24px 16px 48px;display:grid;gap:16px}
 .vit h1{margin:8px 0 0;font:var(--md-sys-typescale-headline-medium)}
 .vit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:16px}

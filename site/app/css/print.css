@@ -1,4 +1,4 @@
-/* Inventta 3D · impressão / PDF do orçamento (mantido do original) */
+/* Projeto Trid · impressão / PDF do orçamento (mantido do original) */
 #printArea{display:none}
 @media print{
   @page{size:A4 portrait;margin:12mm}

@@ -1,4 +1,4 @@
-/* Peça de demonstração em 3D: o símbolo "3D" da Inventta como um chaveiro impresso (placa + símbolo em relevo, uma cor por parte,
+/* Peça de demonstração em 3D: o símbolo "3D" da ProjetoTrid como um chaveiro impresso (placa + símbolo em relevo, uma cor por parte,
    com linhas de camada). A geometria sai do SVG da logo (/app/img/logo-3d-colorido.svg) e usa o three.js que já vem com o app.
    Mesma interface da peça anterior: criarPeca(host, { interativo, paleta, velocidade }) → { paleta(nome), fechar() } ou null. */
 let tres = null;

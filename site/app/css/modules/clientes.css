@@ -1,4 +1,4 @@
-/* Inventta 3D · módulo Clientes (usa só tokens; lista e vazio reaproveitam as classes de orçamentos salvos) */
+/* Projeto Trid · módulo Clientes (usa só tokens; lista e vazio reaproveitam as classes de orçamentos salvos) */
 @media (min-width:720px){.customer-tools{grid-template-columns:minmax(0,1fr) auto}}
 .customer-row-actions{flex-wrap:wrap}
 .customer-dialog form{display:contents}

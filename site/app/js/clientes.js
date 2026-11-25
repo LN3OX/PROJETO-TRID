@@ -1,7 +1,7 @@
-/* Inventta 3D · módulo Clientes: cadastro, consulta, edição e uso nos orçamentos.
-   Usa o cliente Supabase e o usuário expostos por app.js (window.InventtaApp). */
+/* Projeto Trid · módulo Clientes: cadastro, consulta, edição e uso nos orçamentos.
+   Usa o cliente Supabase e o usuário expostos por app.js (window.ProjetoTridApp). */
 (()=>{
-  const $=id=>document.getElementById(id),app=()=>window.InventtaApp;
+  const $=id=>document.getElementById(id),app=()=>window.ProjetoTridApp;
   const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
   const digits=s=>String(s||'').replace(/\D/g,'');
   const fmtPhone=v=>{const d=digits(v).slice(0,11);if(d.length<=2)return d;const s=d.slice(2),p=d.length>10?5:4;return `(${d.slice(0,2)}) ${s.length>p?s.slice(0,p)+'-'+s.slice(p):s}`};
@@ -119,8 +119,8 @@
     finally{btn.disabled=false}
   });
 
-  window.InventtaCustomers={list:()=>customers};
-  document.addEventListener('inventta:auth',()=>{loaded=false;load()});
+  window.ProjetoTridCustomers={list:()=>customers};
+  document.addEventListener('projetotrid:auth',()=>{loaded=false;load()});
   window.addEventListener('hashchange',()=>{if(location.hash==='#/clientes')load(true)});
   load();
 })();

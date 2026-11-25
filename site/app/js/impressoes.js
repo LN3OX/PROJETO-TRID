@@ -1,8 +1,8 @@
-/* Inventta 3D · módulo Impressões: histórico do que foi orçado/impresso.
+/* Projeto Trid · módulo Impressões: histórico do que foi orçado/impresso.
    Salva peça, material, peso, tempo e custos de impressão (por peça), os clientes e as datas dos pedidos,
-   e opcionalmente o arquivo STL/3MF. Usa window.InventtaApp (app.js) e window.InventtaCustomers (clientes.js). */
+   e opcionalmente o arquivo STL/3MF. Usa window.ProjetoTridApp (app.js) e window.ProjetoTridCustomers (clientes.js). */
 (()=>{
-  const $=id=>document.getElementById(id),app=()=>window.InventtaApp;
+  const $=id=>document.getElementById(id),app=()=>window.ProjetoTridApp;
   const BUCKET='inventta3d-models',MAX_FILE=50*1024*1024,EXT=/\.(stl|3mf)$/i;
   const COLS='id,name,material,color,weight_g,print_minutes,material_cost,energy_cost,machine_cost,print_cost,file_path,file_name,file_size,showcase,showcase_price,showcase_text,photo_path,created_at,updated_at,inventta3d_print_requests(id,customer_id,customer_name,quantity,unit_print_cost,requested_at,quote_id)';
   const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
@@ -58,7 +58,7 @@
 
   /* ---------- salvar a partir do orçamento ---------- */
   function itemsFromQuote(){
-    const calc=window.InventtaCalculations;
+    const calc=window.ProjetoTridCalculations;
     return (app().quotes()||[]).map(it=>{
       const d=it.data||{},r=it.result||{},q=Math.max(1,Math.floor(Number(r.q)||Number(d.quantity)||1));
       const material=d.filamentType==='Outro tipo (especificar)'?(d.customFilament?.trim()||'Outro filamento'):(d.filamentType||'');
@@ -84,7 +84,7 @@
 
   async function ensureCustomerId(){
     const d=(app().quotes()[0]||{}).data||{},name=(d.clientName||'').trim();
-    const list=window.InventtaCustomers?window.InventtaCustomers.list():[];
+    const list=window.ProjetoTridCustomers?window.ProjetoTridCustomers.list():[];
     const email=(d.clientEmail||'').trim().toLowerCase(),phone=digits(d.clientPhone);
     const found=list.find(c=>(email&&c.email.toLowerCase()===email)||(phone&&digits(c.phone)===phone)||(name&&norm(c.name)===norm(name)));
     return{id:found?.id||null,name:name||found?.name||''};
@@ -114,7 +114,7 @@
           if(rq.error)throw rq.error;
           print.inventta3d_print_requests=[...print.inventta3d_print_requests,rq.data];saved++;
           // ponytail: desconta peso × quantidade, sem a margem de perdas (o histórico guarda o peso por peça)
-          if(window.InventtaEstoque)estoqueMsg+=await window.InventtaEstoque.descontar(it.material,it.color,Number(it.weight_g)*it.quantity);
+          if(window.ProjetoTridEstoque)estoqueMsg+=await window.ProjetoTridEstoque.descontar(it.material,it.color,Number(it.weight_g)*it.quantity);
         }
         if(file){
           const up=await uploadFile(print,file,uid);
@@ -164,7 +164,7 @@
   /* ---------- ver o arquivo anexado em 3D ---------- */
   let vis=null;const fecharVis=()=>{vis?.fechar();vis=null};
   async function ver3d(p,depois){
-    const F=window.InventtaFatiador,V=window.InventtaVisualizador;if(!F||!V)return;
+    const F=window.ProjetoTridFatiador,V=window.ProjetoTridVisualizador;if(!F||!V)return;
     $('printDetailMsg').textContent='Carregando o modelo…';
     try{const{data,error}=await app().client().storage.from(BUCKET).createSignedUrl(p.file_path,60);if(error||!data?.signedUrl)throw error;
       const bytes=new Uint8Array(await (await fetch(data.signedUrl)).arrayBuffer());
@@ -194,7 +194,7 @@
       $('printDetailMsg').textContent='Enviando arquivo…';const up=await uploadFile(p,f,app().user().id);
       if(!up){$('printDetailMsg').textContent='Não foi possível enviar o arquivo. Tente novamente.';return}replace(up)});
     body.append(fh,fbox);
-    if(window.InventtaVitrine)body.append(window.InventtaVitrine.secao(p,replace));
+    if(window.ProjetoTridVitrine)body.append(window.ProjetoTridVitrine.secao(p,replace));
     const reqs=[...p.inventta3d_print_requests].sort((a,b)=>b.requested_at.localeCompare(a.requested_at));
     body.append(el('h3','',`Pedidos (${reqs.length})`));
     const ul=el('ul','print-requests');
@@ -218,7 +218,7 @@
   $('printSaveCancel').addEventListener('click',()=>$('printSaveDialog').close());$('printSaveClose').addEventListener('click',()=>$('printSaveDialog').close());
   $('printDetailClose').addEventListener('click',()=>$('printDetailDialog').close());$('printDetailDialog').addEventListener('close',fecharVis);$('printDetailDone').addEventListener('click',()=>$('printDetailDialog').close());
   $('printDetailDelete').addEventListener('click',()=>{const p=prints.find(x=>x.id===current);if(p)removePrint(p)});
-  document.addEventListener('inventta:auth',()=>{loaded=false;load()});
+  document.addEventListener('projetotrid:auth',()=>{loaded=false;load()});
   window.addEventListener('hashchange',()=>{if(location.hash==='#/impressoes')load(true)});
   load();
 })();

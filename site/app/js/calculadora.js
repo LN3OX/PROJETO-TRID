@@ -2,7 +2,7 @@
    ("money" = reais com 2 casas, "number" = número com data-calc-casas casas, "auto" = decide pela unidade do desconto).
    "Usar resultado" grava o valor no campo que abriu a calculadora. Para ligar em outro campo: data-calc no <input>. */
 (() => {
-  const N = window.InventtaCalculo;
+  const N = window.ProjetoTridCalculo;
   const $ = (id) => document.getElementById(id);
   const dlg = $('calcDialog');
   if (!N || !dlg) return;

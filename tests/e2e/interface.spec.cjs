@@ -125,11 +125,11 @@ test.describe('enviar por e-mail', () => {
     if (celular) {
       await expect(page.locator('#shareStatus')).toContainText('Compartilhamento aberto');
       const c = await page.evaluate(() => window.__compartilhado);
-      expect(c.arquivos).toEqual(['orcamento-inventta-3d.pdf:application/pdf']);
+      expect(c.arquivos).toEqual(['orcamento-projeto-trid.pdf:application/pdf']);
       expect(c.title).toContain('Rafael Cardoso');
       expect(c.texto).toContain('Olá, Rafael!');
     } else {
-      expect((await download).suggestedFilename()).toBe('orcamento-inventta-3d.pdf');
+      expect((await download).suggestedFilename()).toBe('orcamento-projeto-trid.pdf');
       await expect(page.locator('#shareStatus')).toContainText('PDF baixado e e-mail aberto');
       const [link] = await page.evaluate(() => window.__abertos);
       expect(link).toMatch(/^mailto:rafael%40exemplo\.com\?subject=/);
@@ -156,7 +156,7 @@ test.describe('enviar por e-mail', () => {
     await page.keyboard.press('Escape');
     const download = page.waitForEvent('download');
     await escolherEnvio(page, 'Baixar PDF');
-    expect((await download).suggestedFilename()).toBe('orcamento-inventta-3d.pdf');
+    expect((await download).suggestedFilename()).toBe('orcamento-projeto-trid.pdf');
     await expect(principal).toContainText('Baixar PDF');
     await escolherEnvio(page, 'Pré-visualizar');
     await expect(page.locator('#previewDialog')).toBeVisible();
@@ -455,7 +455,7 @@ test.describe('importar STL para ver em 3D', () => {
     await gerarOrcamento(page);
     page.responder = false; // "Enviar também o GIF?" → não
     await page.locator('#shareMain').click();
-    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 30000 }).toEqual(['orcamento-inventta-3d.png', 'peca-3d.png']);
+    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 30000 }).toEqual(['orcamento-projeto-trid.png', 'peca-3d.png']);
     expect(page.confirmacoes.some((m) => m.includes('GIF'))).toBe(true);
   });
 
@@ -467,7 +467,7 @@ test.describe('importar STL para ver em 3D', () => {
     await expect(page.locator('#slicerView canvas')).toBeVisible();
     await gerarOrcamento(page);
     await page.locator('#shareMain').click();
-    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 90000 }).toEqual(['orcamento-inventta-3d.png:image/png:true', 'peca-3d.png:image/png:true', 'peca-3d.gif:image/gif:true']);
+    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 90000 }).toEqual(['orcamento-projeto-trid.png:image/png:true', 'peca-3d.png:image/png:true', 'peca-3d.gif:image/gif:true']);
   });
 
   test('tela de preço mostra o mesmo quadro do 3D acima dos itens, com a mesma largura; voltar às etapas o devolve', async ({ page }) => {
@@ -496,7 +496,7 @@ test.describe('importar STL para ver em 3D', () => {
     await entrar(page);
     await gerarOrcamento(page);
     await page.locator('#shareMain').click();
-    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 30000 }).toEqual(['orcamento-inventta-3d.png']);
+    await expect.poll(() => page.evaluate(() => window.__envio), { timeout: 30000 }).toEqual(['orcamento-projeto-trid.png']);
   });
 
   test('etapa 3 tem o campo Impressora, com a A1 como padrão', async ({ page }) => {
@@ -573,7 +573,7 @@ test.describe('estoque de filamento', () => {
   test('etapa 2 mostra quanto há do material e avisa quando não basta', async ({ page }) => {
     const banco = await entrar(page);
     banco.db.inventta3d_spools.push({ id: 'rolo-1', owner_id: 'x', material: 'PLA', color: 'Preto', brand: '', weight_g: 1000, remaining_g: 100, price: 0, notes: '', created_at: new Date().toISOString() });
-    await page.evaluate(() => window.InventtaEstoque.recarregar());
+    await page.evaluate(() => window.ProjetoTridEstoque.recarregar());
     await page.getByRole('textbox', { name: 'Nome da peça' }).fill('Peça');
     await page.locator('.panel[data-panel="0"] .btn-next').click();
     await page.locator('#filamentColor').fill('Preto');
@@ -849,7 +849,7 @@ test.describe('telas (módulos)', () => {
     const erros = [];
     page.on('pageerror', (e) => erros.push(e.message));
     await entrar(page);
-    const modulos = await page.evaluate(() => window.INVENTTA_MODULES.map((m) => ({ id: m.id, rota: m.route, nome: m.label })));
+    const modulos = await page.evaluate(() => window.PROJETOTRID_MODULES.map((m) => ({ id: m.id, rota: m.route, nome: m.label })));
     expect(modulos.length).toBeGreaterThanOrEqual(4);
     for (const m of modulos) {
       await page.evaluate((r) => { location.hash = r; }, m.rota);
@@ -862,7 +862,7 @@ test.describe('telas (módulos)', () => {
 
   test('navegação: o item atual do menu acompanha a tela aberta', async ({ page }) => {
     await entrar(page);
-    const modulos = await page.evaluate(() => window.INVENTTA_MODULES.map((m) => ({ rota: m.route, nome: m.label, curto: m.short })));
+    const modulos = await page.evaluate(() => window.PROJETOTRID_MODULES.map((m) => ({ rota: m.route, nome: m.label, curto: m.short })));
     for (const m of modulos) {
       await page.evaluate((r) => { location.hash = r; }, m.rota);
       await expect(page.locator('#mainNav a[aria-current="page"]')).toContainText(m.curto);

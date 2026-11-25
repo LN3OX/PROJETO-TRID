@@ -1,11 +1,11 @@
-/* Inventta 3D · Pedidos: status de produção dos orçamentos salvos (fila), data de entrega, lembrete de retorno
+/* Projeto Trid · Pedidos: status de produção dos orçamentos salvos (fila), data de entrega, lembrete de retorno
    para orçamentos sem resposta e etiqueta com QR para colar no saco da peça.
-   Liga-se à lista de "Salvos" do app.js por InventtaPedidos.filtrar(rows) e InventtaPedidos.decorar(...).
+   Liga-se à lista de "Salvos" do app.js por ProjetoTridPedidos.filtrar(rows) e ProjetoTridPedidos.decorar(...).
    Núcleo puro (testado em tests/pedidos.test.cjs) + tela. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaPedidosNucleo = api;
+  else raiz.ProjetoTridPedidosNucleo = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   const STATUS = [['orcado', 'Orçado'], ['aprovado', 'Aprovado'], ['fila', 'Na fila'], ['imprimindo', 'Imprimindo'], ['acabamento', 'Acabamento'], ['pronto', 'Pronto'], ['entregue', 'Entregue'], ['recusado', 'Recusado']];
   const PRODUCAO = ['aprovado', 'fila', 'imprimindo', 'acabamento'];
@@ -31,7 +31,7 @@
     return lista.filter((r) => f(r));
   }
 
-  function lembrete(r, assinatura = 'Inventta 3D') {
+  function lembrete(r, assinatura = 'Projeto Trid') {
     const nome = String(r.client_name || '').trim().split(/\s+/)[0];
     return `Olá${nome ? `, ${nome}` : ''}! Tudo bem? Passando para saber se você conseguiu ver o orçamento de ${r.title || 'impressão 3D'}. Posso ajudar com alguma dúvida ou ajuste? ${assinatura}`;
   }
@@ -46,7 +46,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const N = window.InventtaPedidosNucleo, $ = (id) => document.getElementById(id), app = () => window.InventtaApp;
+  const N = window.ProjetoTridPedidosNucleo, $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp;
   if (!$('savedFilter')) return;
   const nomes = Object.fromEntries(N.STATUS);
   const real = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -165,6 +165,6 @@
   });
   $('labelClose').addEventListener('click', () => $('labelDialog').close());
 
-  window.InventtaPedidos = { filtrar: (rows) => N.filtrar(rows, filtro), decorar };
+  window.ProjetoTridPedidos = { filtrar: (rows) => N.filtrar(rows, filtro), decorar };
   app()?.renderSaved?.(); // a lista pode ter sido desenhada antes deste arquivo carregar
 })();

@@ -1,17 +1,17 @@
 # Contexto do projeto (leia antes de qualquer tarefa)
 
-**Inventta 3D**: sistema de gestão para impressão 3D (orçamentos, clientes). Web app instalável (PWA), sem app nativo.
+**Projeto Trid**: sistema de gestão para impressão 3D (orçamentos, clientes). Web app instalável (PWA), sem app nativo.
 
 ## Endereços e contas
 - Site: https://inventta3d.github.io (repositório público `Inventta3D/Inventta3D.github.io`, GitHub Pages via Actions)
 - Supabase (banco e login): projeto `exmfmtgaqmawcnqkgmri`
-- Site antigo no Cloudflare: https://inventta3d.pages.dev (versão anterior, em arquivo único; não recebe as mudanças deste repositório)
-- Pasta local: `C:\Users\Lacerda\Projetos\inventta3d`
+- Site antigo no Cloudflare: https://projetotrid.pages.dev (versão anterior, em arquivo único; não recebe as mudanças deste repositório)
+- Pasta local: `C:\Users\Lacerda\Projetos\projetotrid`
 
 ## Stack
 - `site/`: HTML, CSS e JS puros, sem build. Material 3 via tokens em `site/css/tokens.css`.
 - Módulos de tela: `site/js/modules.js` (registro) + uma `<main data-page>` no `index.html`. Guia em `MODULOS.md`.
-- `site/js/app.js` guarda o app dentro de uma função anônima (IIFE): funções e estado não ficam acessíveis no console. O que precisa ser compartilhado sai por `window.InventtaApp`.
+- `site/js/app.js` guarda o app dentro de uma função anônima (IIFE): funções e estado não ficam acessíveis no console. O que precisa ser compartilhado sai por `window.ProjetoTridApp`.
 - Banco: tabelas `inventta3d_quotes` e `inventta3d_customers`, ambas com RLS por dono. Migrações em `supabase/migrations/`.
 
 ## Comandos
@@ -29,7 +29,7 @@
 6. Textos em português, frase curta, verbo no começo, sem enfeite.
 
 ## Armadilhas conhecidas
-- O `gh` do shell do agente enxerga outra conta; para operações do GitHub, usar o terminal do usuário (logado como `Inventta3D`).
+- O `gh` do shell do agente enxerga outra conta; para operações do GitHub, usar o terminal do usuário (logado como `ProjetoTrid`).
 - Testar localmente: desregistrar o service worker e limpar caches, senão o navegador serve CSS/JS antigos.
 - Sem login real, dá para testar com uma sessão simulada no `localStorage` (chave `sb-<ref>-auth-token`) e, para clientes, um Supabase falso em memória.
 - O texto de dica dos campos (`.hint`) é removido da página pelo `context-help.js`: não depender do elemento.

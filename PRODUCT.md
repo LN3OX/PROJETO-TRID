@@ -16,7 +16,7 @@ Quem imprime em 3D e vende peças no Brasil: makers, autônomos e pequenos negó
 
 ## Product Purpose
 
-Inventta 3D transforma os custos reais de uma impressão em um orçamento pronto para enviar ao cliente. O site de apresentação existe para o visitante entender isso em segundos e agir: abrir o aplicativo ou falar com a equipe.
+Projeto Trid transforma os custos reais de uma impressão em um orçamento pronto para enviar ao cliente. O site de apresentação existe para o visitante entender isso em segundos e agir: abrir o aplicativo ou falar com a equipe.
 
 ## Positioning
 
@@ -36,7 +36,7 @@ Fluxo do aplicativo em 5 etapas (Pedido, Material, Impressão, Trabalho, Preço)
 
 ## Brand Commitments
 
-- Nome: Inventta 3D. Logos em site/img (logo-3d-colorido.svg, logo-inventta-3d-colorido.svg e variantes escuras e de uma cor).
+- Nome: Projeto Trid. Logos em site/img (logo-3d-colorido.svg, logo-projeto-trid-colorido.svg e variantes escuras e de uma cor).
 - Identidade existente a manter: vermelho #B91E14 (primário), creme #FFF8EF (superfície), fontes Outfit e DM Sans, tema claro e escuro (tokens em site/css/tokens.css).
 - Voz: direta, em português do Brasil, de quem entende de bancada.
 

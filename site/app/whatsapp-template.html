@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Orçamento Inventta 3D – {{cliente.nome}}</title>
+<title>Orçamento Projeto Trid – {{cliente.nome}}</title>
 <!--
-  MODELO DE ORÇAMENTO PARA WHATSAPP (imagem) – INVENTTA 3D · layout v2
+  MODELO DE ORÇAMENTO PARA WHATSAPP (imagem) – PROJETO TRID · layout v2
   Largura fixa de 540px, exportada em escala 2x (1080px). A altura acompanha o conteúdo.
   O exportador desenha cores de fundo, bordas retas, textos e imagens: sem gradientes, sombras ou pseudo-elementos.
   Marcadores: {{cliente.nome}} {{cliente.email}} {{cliente.telefone}} {{contagem_itens}} {{emissao}}
@@ -12,7 +12,7 @@
               {{#itens}} nome, material, cor, qtd, valor_unit_fmt, total_fmt {{/itens}}
               {{#desconto}}…{{/desconto}} {{^desconto}}…{{/desconto}} {{#tem_cliente}}…{{/tem_cliente}} {{#tem_validade}}{{validade_ate}}{{/tem_validade}}
   Estrutura mantida para o código do app: .resumo, .linha-resumo, .rot, .desc, .total, .tela.
-  Imagens (pasta img): logo-inventta-3d-colorido.svg, logo-3d-uma-cor-grafite.svg, qrcode-pix.png, qrcode-instagram.png
+  Imagens (pasta img): logo-projeto-trid-colorido.svg, logo-3d-uma-cor-grafite.svg, qrcode-pix.png, qrcode-instagram.png
 -->
 <style>
   :root {
@@ -97,7 +97,7 @@
   <div class="faixa" aria-hidden="true"><div class="r"></div><div class="b"></div><div class="g"></div></div>
 
   <header>
-    <img src="logo-inventta-3d-colorido.svg" alt="Inventta 3D">
+    <img src="logo-projeto-trid-colorido.svg" alt="Projeto Trid">
     <div class="doc"><div class="t">Orçamento</div><div class="d">Impressão 3D · {{emissao}}</div>{{#tem_validade}}<div class="d">Válido até {{validade_ate}}</div>{{/tem_validade}}</div>
   </header>
 

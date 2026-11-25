@@ -1,10 +1,10 @@
-/* Inventta 3D · Estoque de filamento (aba "Filamentos" em Impressões): um registro por rolo.
-   Desconta o consumo ao salvar no histórico (impressoes.js chama InventtaEstoque.descontar) e mostra na etapa 2
+/* Projeto Trid · Estoque de filamento (aba "Filamentos" em Impressões): um registro por rolo.
+   Desconta o consumo ao salvar no histórico (impressoes.js chama ProjetoTridEstoque.descontar) e mostra na etapa 2
    quanto há do material escolhido. Núcleo puro (testado em tests/estoque.test.cjs) + tela. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaEstoqueNucleo = api;
+  else raiz.ProjetoTridEstoqueNucleo = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
   const mesmo = (r, material, cor) => norm(r.material) === norm(material) && (!norm(cor) || norm(r.color) === norm(cor));
@@ -25,7 +25,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const N = window.InventtaEstoqueNucleo, $ = (id) => document.getElementById(id), app = () => window.InventtaApp;
+  const N = window.ProjetoTridEstoqueNucleo, $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp;
   if (!$('spoolList')) return;
   const COLS = 'id,material,color,brand,weight_g,remaining_g,price,notes,created_at';
   const g = (n) => `${Math.round(Number(n) || 0).toLocaleString('pt-BR')} g`;
@@ -154,9 +154,9 @@
   $('spoolCancel').addEventListener('click', () => $('spoolDialog').close());
   for (const id of ['filamentType', 'customFilament', 'filamentColor', 'amount', 'quantity', 'waste']) $(id)?.addEventListener('input', dicaOrcamento);
   $('filamentType')?.addEventListener('change', dicaOrcamento);
-  document.addEventListener('inventta:auth', () => { carregado = false; carregar(); });
-  document.addEventListener('inventta:aba', (e) => { if (e.detail === 'panelRolos') carregar(true); });
+  document.addEventListener('projetotrid:auth', () => { carregado = false; carregar(); });
+  document.addEventListener('projetotrid:aba', (e) => { if (e.detail === 'panelRolos') carregar(true); });
   window.addEventListener('hashchange', () => { if (location.hash === '#/impressoes' && !$('panelRolos').hidden) carregar(true); });
   carregar();
-  window.InventtaEstoque = { descontar, recarregar: () => carregar(true) };
+  window.ProjetoTridEstoque = { descontar, recarregar: () => carregar(true) };
 })();

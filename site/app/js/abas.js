@@ -1,6 +1,6 @@
 /* Abas acessíveis (padrão WAI-ARIA): [role=tablist] com botões [role=tab][aria-controls].
    Clique ou setas ←/→, Home e End trocam a aba; só a aba ativa fica na ordem de tabulação.
-   Avisa a troca com o evento "inventta:aba" (detail: id do painel aberto). */
+   Avisa a troca com o evento "projetotrid:aba" (detail: id do painel aberto). */
 (() => {
   function ativar(tab, focar) {
     const lista = tab.closest('[role=tablist]');
@@ -11,7 +11,7 @@
       if (painel) painel.hidden = !on;
     });
     if (focar) tab.focus();
-    document.dispatchEvent(new CustomEvent('inventta:aba', { detail: tab.getAttribute('aria-controls') }));
+    document.dispatchEvent(new CustomEvent('projetotrid:aba', { detail: tab.getAttribute('aria-controls') }));
   }
   document.querySelectorAll('[role=tablist]').forEach((lista) => {
     const tabs = () => [...lista.querySelectorAll('[role=tab]')];
@@ -23,5 +23,5 @@
       if (alvo) { e.preventDefault(); ativar(alvo, true); }
     });
   });
-  window.InventtaAbas = { ativar };
+  window.ProjetoTridAbas = { ativar };
 })();

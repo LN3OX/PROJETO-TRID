@@ -19,7 +19,7 @@ const ALVOS = [
   ['site/app/icons/icon-192.png', 192, {}],
   ['site/app/icons/icon-512.png', 512, {}],
   ['site/app/icons/apple-touch-icon.png', 180, {}],
-  ['site/app/img/inventta-3d-mark.png', 1024, { fundo: false, altura: 1 }],
+  ['site/app/img/projeto-trid-mark.png', 1024, { fundo: false, altura: 1 }],
 ];
 
 (async () => {

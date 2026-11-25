@@ -1,7 +1,7 @@
 /* Casca do app: monta a navegação a partir do registro de módulos, troca de página pela rota (hash)
    e exibe as mensagens de status como snackbar. Não conhece regras de negócio de nenhum módulo. */
 (() => {
-  const modules = window.INVENTTA_MODULES || [];
+  const modules = window.PROJETOTRID_MODULES || [];
   const nav = document.getElementById('mainNav');
   const fallback = modules.find(m => m.default) || modules[0];
   const svgUse = (cls, id) => `<svg class="icon ${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
@@ -37,7 +37,7 @@
     nav?.querySelectorAll('a[data-module]').forEach(a => a.setAttribute('aria-current', a.dataset.module === active?.id ? 'page' : 'false'));
     const menu = document.getElementById('accountSignedIn');
     if (menu) menu.open = false;
-    if (active) document.title = `${active.label} | Inventta 3D`;
+    if (active) document.title = `${active.label} | Projeto Trid`;
     return active;
   }
 
@@ -69,5 +69,5 @@
   autoHideStatus();
   menuDismiss();
   window.addEventListener('hashchange', render);
-  window.InventtaShell = { render, current, modules };
+  window.ProjetoTridShell = { render, current, modules };
 })();

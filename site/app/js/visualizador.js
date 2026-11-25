@@ -1,6 +1,6 @@
 /* Visualizador 3D: mostra a peça (triângulos já lidos do STL/3MF) num <canvas>, com girar, zoom e sombra.
    three.js (site/vendor/three, MIT) só é baixado na primeira vez que algo é mostrado.
-   Uso: const v = await InventtaVisualizador.mostrar(caixa, tri, { cor, nome }); v.cor('#hex'); v.fechar(); */
+   Uso: const v = await ProjetoTridVisualizador.mostrar(caixa, tri, { cor, nome }); v.cor('#hex'); v.fechar(); */
 (() => {
   let three = null;
   const carregar = () => (three ??= Promise.all([
@@ -248,5 +248,5 @@
     };
   }
 
-  window.InventtaVisualizador = { mostrar, corDe };
+  window.ProjetoTridVisualizador = { mostrar, corDe };
 })();

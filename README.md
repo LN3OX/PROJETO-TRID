@@ -1,4 +1,4 @@
-# Inventta 3D: orçamentos de impressão 3D
+# Projeto Trid: orçamentos de impressão 3D
 
 Site, feito como PWA (Progressive Web App): o visitante instala direto do navegador (Chrome/Edge: menu ⋮ "Instalar app"; Safari no iPhone: Compartilhar → "Adicionar à Tela de Início"), sem APK e sem loja de aplicativos. Toda atualização do site chega ao app instalado sozinha.
 

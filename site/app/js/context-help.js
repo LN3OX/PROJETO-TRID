@@ -30,7 +30,7 @@
     validityDays:'Opcional. Define por quantos dias o preço e as condições deste orçamento ficam válidos. A data final é incluída nos materiais compartilhados.',
     savedSearch:'Filtra a lista enquanto você digita. A busca considera o nome da peça, o cliente, o e-mail e o telefone salvos.',
     savedSort:'Muda a ordem da lista sem alterar os orçamentos: por data, valor ou nome do cliente.',
-    installApp:'Abre as instruções para adicionar a Inventta 3D à tela inicial do dispositivo.',
+    installApp:'Abre as instruções para adicionar a Projeto Trid à tela inicial do dispositivo.',
     themeToggle:'Alterna entre o tema claro e o escuro. A preferência é aplicada à interface, sem alterar os orçamentos.'
   };
   const HOVER_DELAY=700,FOCUS_DELAY=250,HIDE_DELAY=1500;

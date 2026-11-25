@@ -1,10 +1,10 @@
-/* Inventta 3D · Preço para marketplace: a partir de quanto você quer receber, calcula o preço do anúncio
+/* Projeto Trid · Preço para marketplace: a partir de quanto você quer receber, calcula o preço do anúncio
    descontando comissão, taxa fixa por venda, imposto e frete pago por você. Visão interna (não vai ao cliente).
    Núcleo puro (testado em tests/marketplace.test.cjs) + bloco na tela de resultado. */
 (function (raiz, fabrica) {
   const api = fabrica();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else raiz.InventtaMarketplace = api;
+  else raiz.ProjetoTridMarketplace = api;
 })(typeof self !== 'undefined' ? self : this, function () {
   // ponytail: tabelas públicas de 2026 (fontes divergem; a plataforma muda sem aviso). Tudo é editável na tela.
   const PLATAFORMAS = {
@@ -33,7 +33,7 @@
 
 (() => {
   if (typeof document === 'undefined') return;
-  const M = window.InventtaMarketplace, $ = (id) => document.getElementById(id);
+  const M = window.ProjetoTridMarketplace, $ = (id) => document.getElementById(id);
   if (!$('mktPlatform')) return;
   const real = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
   const numero = (v) => { const n = Number(String(v).replace(/\./g, '').replace(',', '.')); return Number.isFinite(n) ? n : 0; };

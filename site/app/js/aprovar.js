@@ -1,4 +1,4 @@
-/* Inventta 3D · página pública do link de aprovação (aprovar.html?t=<token>). Sem login.
+/* Projeto Trid · página pública do link de aprovação (aprovar.html?t=<token>). Sem login.
    Lê o orçamento pela função inventta3d_quote_public (só itens, quantidades e preços; nunca custos)
    e grava a resposta por inventta3d_quote_respond. */
 (() => {

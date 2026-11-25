@@ -1,4 +1,4 @@
-/* Inventta 3D · módulo Painel (usa só tokens) */
+/* Projeto Trid · módulo Painel (usa só tokens) */
 .dash-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 24px;margin:16px 0 24px}
 .dash-head h1{margin:0}
 .dash-head p{margin:6px 0 0;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium)}

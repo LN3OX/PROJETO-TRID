@@ -25,7 +25,7 @@ const git = (cmd) => execSync(`git ${cmd}`, { cwd: root, stdio: ['ignore', 'pipe
 function carregarModulos() {
   const ctx = { window: {} };
   vm.runInNewContext(read('site/app/js/modules.js'), ctx);
-  return ctx.window.INVENTTA_MODULES;
+  return ctx.window.PROJETOTRID_MODULES;
 }
 
 test('HTML: ids são únicos', () => {
@@ -88,7 +88,7 @@ test('service worker: pré-carrega todo CSS/JS do index.html e os arquivos exist
   assert.deepEqual(fora, [], 'adicione ao APP_SHELL de sw.js');
   const inexistentes = shell.filter((s) => s !== './' && !fs.existsSync(path.join(site, s)));
   assert.deepEqual(inexistentes, []);
-  assert.match(sw, /CACHE_NAME\s*=\s*'inventta3d-v\d+'/);
+  assert.match(sw, /CACHE_NAME\s*=\s*'projetotrid-v\d+'/);
 });
 
 test('service worker: quem altera o site sobe a versão do cache', (t) => {

@@ -1,5 +1,5 @@
-const CACHE_NAME='inventta3d-v102';
-const KIRI_CACHE='inventta3d-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
+const CACHE_NAME='projetotrid-v102';
+const KIRI_CACHE='projetotrid-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
 const APP_SHELL=[
   './',
   './index.html',
@@ -19,9 +19,9 @@ const APP_SHELL=[
   './icons/icon-512.png',
   './icons/apple-touch-icon.png',
   './fonts/outfit-latin-wght-normal.woff2',
-  './img/inventta-3d-mark.png',
-  './img/logo-inventta-3d-colorido.svg',
-  './img/logo-inventta-3d-escuro.svg',
+  './img/projeto-trid-mark.png',
+  './img/logo-projeto-trid-colorido.svg',
+  './img/logo-projeto-trid-escuro.svg',
   './img/logo-3d-colorido.svg',
   './img/logo-3d-escuro.svg',
   './img/logo-3d-uma-cor-grafite.svg',
@@ -61,7 +61,7 @@ self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('precifica3d-')||key.startsWith('inventta3d-'))&&key!==CACHE_NAME&&key!==KIRI_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
+  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('precifica3d-')||key.startsWith('projetotrid-'))&&key!==CACHE_NAME&&key!==KIRI_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
 });
 self.addEventListener('fetch',event=>{
   const request=event.request;

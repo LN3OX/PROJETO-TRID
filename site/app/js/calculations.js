@@ -1,7 +1,7 @@
 (function (root, factory) {
   const api = factory();
   if (typeof module === 'object' && module.exports) module.exports = api;
-  else root.InventtaCalculations = api;
+  else root.ProjetoTridCalculations = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   function printDurationHours(value) {

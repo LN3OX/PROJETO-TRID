@@ -1,4 +1,4 @@
-/* Inventta 3D · calculadora (usa só tokens) */
+/* Projeto Trid · calculadora (usa só tokens) */
 .control-wrap .calc-open{flex:none;--btn-h:40px;margin-right:4px}
 .calc-dialog{padding:0;border:0;border-radius:var(--shape-surface);background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);box-shadow:var(--md-sys-elevation-3);width:min(360px,calc(100vw - 24px))}
 .calc-dialog[open]{display:grid;gap:12px;padding:8px 16px 16px;animation:dialog-in var(--md-sys-motion-duration-long) var(--md-sys-motion-easing-emphasized-decelerate)}

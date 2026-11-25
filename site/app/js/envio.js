@@ -11,7 +11,7 @@
     texto: { btn: 'copyBtn', rotulo: 'Copiar texto', icone: 'i-copy' },
     pdf: { btn: 'pdfBtn', rotulo: 'Baixar PDF', icone: 'i-file' },
   };
-  const CHAVE = 'inventta3d-envio';
+  const CHAVE = 'projetotrid-envio';
   let atual = 'whatsapp';
   try { const salvo = localStorage.getItem(CHAVE); if (ACOES[salvo]) atual = salvo; } catch { /* sem armazenamento: usa o padrão */ }
   const itens = () => [...menu.querySelectorAll('[role="menuitem"]')];

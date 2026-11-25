@@ -1,7 +1,7 @@
 /* Calculadora da página: o mesmo cálculo do aplicativo (/app/js/calculations.js), com valores de exemplo. */
 (() => {
   const $ = (s) => document.querySelector(s);
-  if (!window.InventtaCalculations || !$('#calc')) return;
+  if (!window.ProjetoTridCalculations || !$('#calc')) return;
   const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
   const BASE = { packPrice: 120, packQty: 1000, waste: 8, failure: 5, power: 120, energyRate: 0.95, printerCost: 3200, lifeHours: 5000, maintenance: 0.4, setupMin: 20, finishMin: 10, laborRate: 30, packaging: 6, salesFee: 0, taxRate: 0 };
   const hhmm = (min) => `${String(Math.floor(min / 60)).padStart(2, '0')}:${String(min % 60).padStart(2, '0')}`;
@@ -16,7 +16,7 @@
       v[k] = Number(c.value); saida[k].textContent = fmt[k](v[k]);
       c.style.setProperty('--p', `${((c.value - c.min) / (c.max - c.min)) * 100}%`);
     }
-    const r = window.InventtaCalculations.calculate({ ...BASE, amount: v.peso, printHours: hhmm(v.minutos), margin: v.margem, quantity: v.qtd });
+    const r = window.ProjetoTridCalculations.calculate({ ...BASE, amount: v.peso, printHours: hhmm(v.minutos), margin: v.margem, quantity: v.qtd });
     if (!r) return;
     $('#r-unit').textContent = BRL.format(r.unitPrice);
     $('#r-total').textContent = BRL.format(r.price);
@@ -44,13 +44,13 @@
   hosts.forEach((h) => io.observe(h));
 })();
 
-/* tema: o botão alterna claro/escuro e grava a escolha (a mesma chave do aplicativo, inventta-theme) */
+/* tema: o botão alterna claro/escuro e grava a escolha (a mesma chave do aplicativo, projetotrid-theme) */
 (() => {
   const raiz = document.documentElement, mq = matchMedia('(prefers-color-scheme: dark)'), meta = document.querySelector('meta[name="theme-color"]'), botao = document.querySelector('[data-tema]');
   if (!botao) return;
   const escuro = () => (raiz.dataset.theme || (mq.matches ? 'dark' : 'light')) === 'dark';
   const pintar = () => { const d = escuro(); botao.setAttribute('aria-pressed', String(d)); botao.setAttribute('aria-label', d ? 'Usar tema claro' : 'Usar tema escuro'); if (meta) meta.content = d ? '#16130b' : '#fff8ef'; };
-  botao.addEventListener('click', () => { raiz.dataset.theme = escuro() ? 'light' : 'dark'; try { localStorage.setItem('inventta-theme', raiz.dataset.theme); } catch { /* sem armazenamento */ } pintar(); });
+  botao.addEventListener('click', () => { raiz.dataset.theme = escuro() ? 'light' : 'dark'; try { localStorage.setItem('projetotrid-theme', raiz.dataset.theme); } catch { /* sem armazenamento */ } pintar(); });
   mq.addEventListener('change', pintar);
   pintar();
 })();
@@ -68,10 +68,10 @@
 /* #como: o preço se forma etapa por etapa, com os números do mesmo cálculo do aplicativo (peça de demonstração) */
 (() => {
   const raiz = document.getElementById('construcao');
-  if (!raiz || !window.InventtaCalculations) return;
+  if (!raiz || !window.ProjetoTridCalculations) return;
   const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
   const base = { packPrice: 120, packQty: 1000, waste: 8, failure: 5, power: 120, energyRate: 0.95, printerCost: 3200, lifeHours: 5000, maintenance: 0.4, setupMin: 5, finishMin: 1, laborRate: 30, packaging: 0.5, salesFee: 0, taxRate: 0 };
-  const r = window.InventtaCalculations.calculate({ ...base, amount: 9, printHours: '00:40', margin: 120, quantity: 50 });
+  const r = window.ProjetoTridCalculations.calculate({ ...base, amount: 9, printHours: '00:40', margin: 120, quantity: 50 });
   if (!r) return;
   const valores = { material: r.material, energia: r.energy, maquina: r.machine, trabalho: r.labor + r.packaging, falhas: r.failureCost, lucro: Math.max(0, r.profit) };
   const ordem = ['material', 'energia', 'maquina', 'trabalho', 'falhas', 'lucro'];

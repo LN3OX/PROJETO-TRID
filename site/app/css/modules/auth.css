@@ -1,4 +1,4 @@
-/* Inventta 3D · módulo de acesso (login, criação de conta, recuperação de senha) */
+/* Projeto Trid · módulo de acesso (login, criação de conta, recuperação de senha) */
 
 .login-screen{--login-inset:16px;--login-pad:48px;--login-h:760px;--login-extra:max(0px,calc((100svh - var(--login-h)) / 2));--login-bottom:calc(var(--login-pad) + 102px);position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,1fr);background:var(--md-sys-color-surface)}
 .login-aside{display:none}
