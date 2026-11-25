@@ -12,7 +12,7 @@ const medir = (page, url, largura) => page.evaluate(async ([u, w]) => {
 }, [url, largura]);
 
 test.describe('identidade visual', () => {
-  for (const [arq, larg] of [['/app/icons/icon-512.png', 512], ['/app/icons/icon-192.png', 192], ['/app/icons/apple-touch-icon.png', 180], ['/app/icons/favicon.png', 64], ['/app/img/projeto-trid-mark.png', 512]]) {
+  for (const [arq, larg] of [['/app/icons/trid-512.png', 512], ['/app/icons/trid-maskable-512.png', 512], ['/app/icons/trid-192.png', 192], ['/app/icons/trid-apple-touch.png', 180], ['/app/icons/trid-favicon.png', 64], ['/app/img/projeto-trid-mark.png', 512]]) {
     test(`o símbolo de cubos fica no centro: ${arq}`, async ({ page }) => {
       await page.goto('/app/');
       const m = await medir(page, arq, larg);

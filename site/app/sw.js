@@ -1,9 +1,9 @@
-const CACHE_NAME='projetotrid-v109';
+const CACHE_NAME='projetotrid-v110';
 const KIRI_CACHE='projetotrid-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
 const APP_SHELL=[
   './',
   './index.html',
-  './manifest.json',
+  './manifest.webmanifest',
   './pwa.css',
   './css/tokens.css',
   './css/components.css',
@@ -15,15 +15,16 @@ const APP_SHELL=[
   './css/modules/calculadora.css',
   './css/modules/painel.css',
   './css/print.css',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/apple-touch-icon.png',
+  './icons/trid-192.png',
+  './icons/trid-512.png',
+  './icons/trid-apple-touch.png',
   './fonts/outfit-latin-wght-normal.woff2',
   './img/projeto-trid-mark.png',
   './img/logo-trid-claro.png',
   './img/logo-trid-escuro.png',
   './img/logo-trid-simbolo.png',
-  './icons/favicon.png',
+  './icons/trid-favicon.png',
+  './icons/trid-maskable-512.png',
   './img/qrcode-instagram.png',
   './img/qrcode-pix.png',
   './templates/whatsapp-template.html',
@@ -57,7 +58,7 @@ const APP_SHELL=[
   './vendor/supabase.js'
 ];
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL.map(url=>new Request(url,{cache:'reload'})))).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
   event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('precifica3d-')||key.startsWith('inventta3d-')||key.startsWith('projetotrid-'))&&key!==CACHE_NAME&&key!==KIRI_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
