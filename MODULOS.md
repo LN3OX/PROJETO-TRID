@@ -35,7 +35,7 @@ Regra de ouro: módulos usam só **tokens** e **componentes**. Nada de cor ou ta
    ```
 3. **Ícones**: copie o `<path>` dos arquivos `inventory_2.svg` e `inventory_2-fill.svg` do pacote `@material-symbols/svg-400` (estilo *rounded*) para um `<symbol id="i-inventory" viewBox="0 -960 960 960">` no sprite do `index.html`.
 4. **Estilos** em `css/modules/estoque.css` e **script** em `js/estoque.js`. Inclua os dois no `index.html` e na lista `APP_SHELL` do `sw.js`, e suba a versão do cache (`CACHE_NAME`).
-5. **Dados**: crie uma tabela própria no Supabase (migração em `supabase/migrations/`) com a mesma política de acesso por usuário de `inventta3d_quotes`.
+5. **Dados**: crie uma tabela própria no Supabase (migração em `supabase/migrations/`) com a mesma política de acesso por usuário de `projetotrid_quotes`.
 
 A navegação se ajusta sozinha: até 5 módulos cabem na barra inferior do celular. Acima disso, agrupe os menos usados em um módulo “Mais”. A barra lateral do computador comporta até 7.
 

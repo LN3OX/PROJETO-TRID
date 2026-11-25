@@ -4,7 +4,7 @@
 (() => {
   const $ = (id) => document.getElementById(id), app = () => window.ProjetoTridApp, V = window.ProjetoTridVitrineNucleo;
   if (!$('shopForm') || !V) return;
-  const BUCKET = 'inventta3d-vitrine', MAX_FOTO = 5 * 1024 * 1024;
+  const BUCKET = 'projetotrid-vitrine', MAX_FOTO = 5 * 1024 * 1024;
   const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined) e.textContent = txt; return e; };
   const num = (v) => Number(String(v).replace(/\./g, '').replace(',', '.'));
   let loja = null, carregada = false;
@@ -12,7 +12,7 @@
 
   async function carregar() {
     if (!(app()?.client() && app()?.user())) { loja = null; carregada = false; return; }
-    const { data, error } = await app().client().from('inventta3d_shop').select('owner_id,slug,name,whatsapp,intro,enabled').limit(1);
+    const { data, error } = await app().client().from('projetotrid_shop').select('owner_id,slug,name,whatsapp,intro,enabled').limit(1);
     if (error) { $('shopMsg').textContent = 'Não foi possível carregar a vitrine.'; return; }
     loja = data?.[0] || null; carregada = true; preencher();
   }
@@ -38,7 +38,7 @@
     if (!V.slugValido(dados.slug)) { $('shopMsg').textContent = 'Escolha um endereço com 3 a 40 letras minúsculas, números ou hífen.'; $('shopSlug').focus(); return; }
     if (dados.enabled && dados.whatsapp.length < 10) { $('shopMsg').textContent = 'Informe o WhatsApp com DDD para receber os pedidos.'; $('shopWhats').focus(); return; }
     if (!confirm('Salvar as configurações da vitrine?')) return;
-    const t = app().client().from('inventta3d_shop');
+    const t = app().client().from('projetotrid_shop');
     const r = loja ? await t.update(dados).eq('owner_id', loja.owner_id).select().single() : await t.insert(dados).select().single();
     if (r.error) { $('shopMsg').textContent = /duplicate|unique|23505/i.test(r.error.message || r.error.code || '') ? 'Esse endereço já está em uso. Escolha outro.' : 'Não foi possível salvar. Tente novamente.'; return; }
     loja = r.data; $('shopMsg').textContent = ''; preencher();
@@ -74,7 +74,7 @@
           if (p.photo_path) await c.storage.from(BUCKET).remove([p.photo_path]);
           campos.photo_path = caminho;
         }
-        const r = await c.from('inventta3d_prints').update(campos).eq('id', p.id).select('id,showcase,showcase_price,showcase_text,photo_path').single();
+        const r = await c.from('projetotrid_prints').update(campos).eq('id', p.id).select('id,showcase,showcase_price,showcase_text,photo_path').single();
         if (r.error) throw r.error;
         msg.textContent = ''; aoSalvar({ ...p, ...r.data });
         app().status(r.data.showcase ? `${p.name} está na vitrine.` : `${p.name} saiu da vitrine.`);

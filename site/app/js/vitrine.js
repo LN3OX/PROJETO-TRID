@@ -1,5 +1,5 @@
 /* Projeto Trid · vitrine pública (vitrine.html?loja=<endereço>). Sem login.
-   Lê pela função inventta3d_showcase (só peças marcadas: nome, material, cor, preço, descrição e foto).
+   Lê pela função projetotrid_showcase (só peças marcadas: nome, material, cor, preço, descrição e foto).
    "Quero uma igual" abre o WhatsApp da loja; nada é gravado pelo visitante. */
 (function (raiz, fabrica) {
   const api = fabrica();
@@ -9,7 +9,7 @@
   const slugValido = (s) => /^[a-z0-9](?:[a-z0-9-]{1,38})[a-z0-9]$/.test(String(s || ''));
   const paraSlug = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
   const pedido = (loja, peca) => `Olá${loja ? `, ${loja}` : ''}! Vi na vitrine: ${peca.name}${peca.color ? ` (${peca.color})` : ''}. Quero uma igual. Pode me passar o orçamento?`;
-  const fotoUrl = (base, caminho) => (caminho ? `${base}/storage/v1/object/public/inventta3d-vitrine/${caminho.split('/').map(encodeURIComponent).join('/')}` : '');
+  const fotoUrl = (base, caminho) => (caminho ? `${base}/storage/v1/object/public/projetotrid-vitrine/${caminho.split('/').map(encodeURIComponent).join('/')}` : '');
   return { slugValido, paraSlug, pedido, fotoUrl };
 });
 
@@ -27,7 +27,7 @@
   async function carregar() {
     if (!cliente) return aviso('Não foi possível abrir', 'Atualize a página para tentar de novo.');
     if (!V.slugValido(loja)) return aviso('Vitrine não encontrada', 'Confira o endereço da vitrine.');
-    const { data: v, error } = await cliente.rpc('inventta3d_showcase', { p_slug: loja });
+    const { data: v, error } = await cliente.rpc('projetotrid_showcase', { p_slug: loja });
     if (error) return aviso('Não foi possível abrir', 'Verifique sua conexão e atualize a página.');
     if (!v) return aviso('Vitrine não encontrada', 'Ela pode estar desativada. Confira o endereço com a loja.');
     document.title = `${v.name || 'Vitrine'} | Projeto Trid`;

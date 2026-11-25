@@ -23,8 +23,8 @@ test('resumo do mês: soma só o mês pedido; lucro usa o total final menos taxa
 
 test('pedidos do histórico: conta pedidos, peças e custo; ranking por unidades', () => {
   const imps = [
-    { name: 'Suporte', inventta3d_print_requests: [{ quantity: 3, unit_print_cost: 2, requested_at: '2026-11-02T10:00:00' }, { quantity: 1, unit_print_cost: 2, requested_at: '2026-09-02T10:00:00' }] },
-    { name: 'Chaveiro', inventta3d_print_requests: [{ quantity: 5, unit_print_cost: 1, requested_at: '2026-11-10T10:00:00' }] },
+    { name: 'Suporte', projetotrid_print_requests: [{ quantity: 3, unit_print_cost: 2, requested_at: '2026-11-02T10:00:00' }, { quantity: 1, unit_print_cost: 2, requested_at: '2026-09-02T10:00:00' }] },
+    { name: 'Chaveiro', projetotrid_print_requests: [{ quantity: 5, unit_print_cost: 1, requested_at: '2026-11-10T10:00:00' }] },
   ];
   const r = P.resumoMes([], imps, 2026, 10, calc);
   assert.deepStrictEqual([r.pedidos, r.unidades, r.custoImpressao], [2, 8, 11]);

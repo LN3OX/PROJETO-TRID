@@ -18,7 +18,7 @@ function sessao() {
 
 // Banco falso: imita o suficiente do PostgREST e do Storage para o app funcionar sem rede.
 function bancoFalso() {
-  const db = { inventta3d_quotes: [], inventta3d_customers: [], inventta3d_prints: [], inventta3d_print_requests: [], inventta3d_spools: [], inventta3d_printers: [], inventta3d_shop: [] };
+  const db = { projetotrid_quotes: [], projetotrid_customers: [], projetotrid_prints: [], projetotrid_print_requests: [], projetotrid_spools: [], projetotrid_printers: [], projetotrid_shop: [] };
   const arquivos = {};
   const acesso = { status: 'approved' }; // aprovação de acesso: 'approved' | 'pending' | 'blocked'
   let seq = 0;
@@ -31,19 +31,19 @@ function bancoFalso() {
     const unico = (req.headers().accept || '').includes('vnd.pgrst.object');
     const quer = (req.headers().prefer || '').includes('return=representation');
     if (url.pathname.startsWith('/rest/v1/rpc/')) {
-      const corpo = JSON.parse(req.postData() || '{}'), q = db.inventta3d_quotes.find((r) => r.share_token && r.share_token === corpo.p_token);
-      if (url.pathname.endsWith('/inventta3d_request_access')) return json(route, 200, acesso.status);
-      if (url.pathname.endsWith('/inventta3d_showcase')) {
-        const s = db.inventta3d_shop.find((x) => x.enabled && x.slug === String(corpo.p_slug || '').toLowerCase());
+      const corpo = JSON.parse(req.postData() || '{}'), q = db.projetotrid_quotes.find((r) => r.share_token && r.share_token === corpo.p_token);
+      if (url.pathname.endsWith('/projetotrid_request_access')) return json(route, 200, acesso.status);
+      if (url.pathname.endsWith('/projetotrid_showcase')) {
+        const s = db.projetotrid_shop.find((x) => x.enabled && x.slug === String(corpo.p_slug || '').toLowerCase());
         if (!s) return json(route, 200, null);
-        return json(route, 200, { name: s.name, intro: s.intro, whatsapp: s.whatsapp, items: db.inventta3d_prints.filter((p) => p.showcase).map((p) => ({ id: p.id, name: p.name, material: p.material, color: p.color, price: p.showcase_price ?? null, text: p.showcase_text || '', photo_path: p.photo_path || null })) });
+        return json(route, 200, { name: s.name, intro: s.intro, whatsapp: s.whatsapp, items: db.projetotrid_prints.filter((p) => p.showcase).map((p) => ({ id: p.id, name: p.name, material: p.material, color: p.color, price: p.showcase_price ?? null, text: p.showcase_text || '', photo_path: p.photo_path || null })) });
       }
-      if (url.pathname.endsWith('/inventta3d_quote_public')) {
+      if (url.pathname.endsWith('/projetotrid_quote_public')) {
         if (!q) return json(route, 200, null);
         return json(route, 200, { title: q.title, client_name: String(q.client_name || '').trim().split(' ')[0], created_at: q.created_at, status: q.status || 'orcado', client_response: q.client_response || null, client_response_at: q.client_response_at || null, subtotal: q.subtotal, discount_amount: q.discount_amount, total: q.total,
           items: (q.items || []).map((it) => ({ product: it.data?.product || 'Peça impressa em 3D', quantity: it.result?.q || it.data?.quantity || 1, material: it.data?.filamentType || '', color: it.data?.filamentColor || '', unit_price: Number(it.result?.unitPrice || 0) })) });
       }
-      if (url.pathname.endsWith('/inventta3d_quote_respond')) {
+      if (url.pathname.endsWith('/projetotrid_quote_respond')) {
         if (!q || (q.status || 'orcado') !== 'orcado' || !['aprovado', 'ajuste'].includes(corpo.p_decision)) return json(route, 400, { message: 'orçamento não encontrado ou já respondido' });
         Object.assign(q, { client_response: corpo.p_decision, client_response_at: new Date().toISOString(), client_note: corpo.p_note || '' }, corpo.p_decision === 'aprovado' ? { status: 'aprovado', status_at: new Date().toISOString() } : {});
         return json(route, 200, q.status);
@@ -55,7 +55,7 @@ function bancoFalso() {
       if (!linhas) return json(route, 404, { message: 'tabela desconhecida' });
       const filtroId = (url.searchParams.get('id') || '').replace(/^eq\./, '');
       const alvo = () => (filtroId ? linhas.filter((r) => r.id === filtroId) : linhas.slice());
-      const completa = (r) => (tabela === 'inventta3d_prints' ? { ...r, inventta3d_print_requests: db.inventta3d_print_requests.filter((q) => q.print_id === r.id) } : r);
+      const completa = (r) => (tabela === 'projetotrid_prints' ? { ...r, projetotrid_print_requests: db.projetotrid_print_requests.filter((q) => q.print_id === r.id) } : r);
       const resposta = (rs, status) => (unico ? (rs.length ? json(route, status, completa(rs[0])) : json(route, 406, { message: 'nenhuma linha' })) : json(route, status, rs.map(completa)));
       if (metodo === 'GET') return resposta(alvo(), 200);
       if (metodo === 'POST') {
@@ -72,7 +72,7 @@ function bancoFalso() {
       if (metodo === 'DELETE') {
         alvo().forEach((r) => {
           linhas.splice(linhas.indexOf(r), 1);
-          if (tabela === 'inventta3d_prints') db.inventta3d_print_requests = db.inventta3d_print_requests.filter((q) => q.print_id !== r.id);
+          if (tabela === 'projetotrid_prints') db.projetotrid_print_requests = db.projetotrid_print_requests.filter((q) => q.print_id !== r.id);
         });
         return route.fulfill({ status: 204, headers: cors });
       }

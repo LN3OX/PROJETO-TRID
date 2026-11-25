@@ -14,7 +14,7 @@
     if(!ready()){customers=[];loaded=false;render();fillPicker();return}
     if(loaded&&!force)return;
     $('customerStatus').textContent='Carregando seus clientes…';
-    const{data,error}=await app().client().from('inventta3d_customers').select(COLS).limit(500);
+    const{data,error}=await app().client().from('projetotrid_customers').select(COLS).limit(500);
     if(error){$('customerStatus').textContent='Não foi possível carregar seus clientes. Atualize a página para tentar novamente.';return}
     customers=data||[];sortByName();loaded=true;render();fillPicker();
   }
@@ -61,7 +61,7 @@
 
   async function remove(c){
     if(!window.confirm(`Excluir “${c.name}”? Os orçamentos já salvos não são alterados.`))return;
-    const{error}=await app().client().from('inventta3d_customers').delete().eq('id',c.id);
+    const{error}=await app().client().from('projetotrid_customers').delete().eq('id',c.id);
     if(error){$('customerStatus').textContent='Não foi possível excluir este cliente.';return}
     customers=customers.filter(x=>x.id!==c.id);render();fillPicker();app().status('Cliente excluído.');
   }
@@ -78,7 +78,7 @@
 
   async function upsert(fields,id){
     const c=app().client(),payload={name:fields.name,email:fields.email,phone:fields.phone,notes:fields.notes,updated_at:new Date().toISOString()};
-    const res=id?await c.from('inventta3d_customers').update(payload).eq('id',id).select(COLS).single():await c.from('inventta3d_customers').insert(payload).select(COLS).single();
+    const res=id?await c.from('projetotrid_customers').update(payload).eq('id',id).select(COLS).single():await c.from('projetotrid_customers').insert(payload).select(COLS).single();
     if(res.error)throw res.error;
     customers=customers.filter(x=>x.id!==res.data.id);customers.push(res.data);sortByName();render();fillPicker();
     return res.data;

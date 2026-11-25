@@ -35,7 +35,7 @@
     }
     let pedidos = 0, unidades = 0, custoImpressao = 0;
     const pecas = new Map();
-    for (const p of impressoes) for (const r of p.inventta3d_print_requests || []) {
+    for (const p of impressoes) for (const r of p.projetotrid_print_requests || []) {
       if (!noMes(r.requested_at, ano, mes)) continue;
       const q = Number(r.quantity) || 0;
       pedidos++; unidades += q; custoImpressao += q * (Number(r.unit_print_cost) || 0);
@@ -76,8 +76,8 @@
     const c = app().client();
     // ponytail: busca até 1000 orçamentos e filtra no aparelho; trocar por consulta por período se o volume crescer
     const [q, p] = await Promise.all([
-      c.from('inventta3d_quotes').select('id,client_name,items,total,created_at,status').order('created_at', { ascending: false }).limit(1000),
-      c.from('inventta3d_prints').select('id,name,inventta3d_print_requests(id,quantity,unit_print_cost,requested_at)').limit(1000),
+      c.from('projetotrid_quotes').select('id,client_name,items,total,created_at,status').order('created_at', { ascending: false }).limit(1000),
+      c.from('projetotrid_prints').select('id,name,projetotrid_print_requests(id,quantity,unit_print_cost,requested_at)').limit(1000),
     ]);
     if (q.error || p.error) { $('dashStatus').textContent = 'Não foi possível carregar o painel. Atualize a página para tentar novamente.'; return; }
     orcs = q.data || []; imps = p.data || []; carregado = true;

@@ -1,7 +1,7 @@
 -- Histórico de impressões: uma linha por peça impressa (valores só de impressão, por peça)
 -- e uma linha por pedido em que ela foi orçada (cliente e data).
 
-create table if not exists public.inventta3d_prints (
+create table if not exists public.projetotrid_prints (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
   name text not null check (char_length(btrim(name)) between 1 and 120),
@@ -21,38 +21,38 @@ create table if not exists public.inventta3d_prints (
 );
 
 -- a mesma peça no mesmo material é um único registro por usuário
-create unique index if not exists inventta3d_prints_owner_name_material_uq
-  on public.inventta3d_prints (owner_id, lower(btrim(name)), lower(btrim(material)));
+create unique index if not exists projetotrid_prints_owner_name_material_uq
+  on public.projetotrid_prints (owner_id, lower(btrim(name)), lower(btrim(material)));
 
-create table if not exists public.inventta3d_print_requests (
+create table if not exists public.projetotrid_print_requests (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
-  print_id uuid not null references public.inventta3d_prints(id) on delete cascade,
-  customer_id uuid references public.inventta3d_customers(id) on delete set null,
+  print_id uuid not null references public.projetotrid_prints(id) on delete cascade,
+  customer_id uuid references public.projetotrid_customers(id) on delete set null,
   customer_name text not null default '' check (char_length(customer_name) <= 80),
-  quote_id uuid references public.inventta3d_quotes(id) on delete set null,
+  quote_id uuid references public.projetotrid_quotes(id) on delete set null,
   quantity integer not null default 1 check (quantity >= 1),
   unit_print_cost numeric(12,2) not null default 0 check (unit_print_cost >= 0),
   requested_at timestamptz not null default now(),
   created_at timestamptz not null default now()
 );
 
-create index if not exists inventta3d_print_requests_print_idx
-  on public.inventta3d_print_requests (print_id, requested_at desc);
-create index if not exists inventta3d_print_requests_owner_idx
-  on public.inventta3d_print_requests (owner_id, requested_at desc);
-create index if not exists inventta3d_print_requests_customer_idx
-  on public.inventta3d_print_requests (customer_id) where customer_id is not null;
-create index if not exists inventta3d_print_requests_quote_idx
-  on public.inventta3d_print_requests (quote_id) where quote_id is not null;
+create index if not exists projetotrid_print_requests_print_idx
+  on public.projetotrid_print_requests (print_id, requested_at desc);
+create index if not exists projetotrid_print_requests_owner_idx
+  on public.projetotrid_print_requests (owner_id, requested_at desc);
+create index if not exists projetotrid_print_requests_customer_idx
+  on public.projetotrid_print_requests (customer_id) where customer_id is not null;
+create index if not exists projetotrid_print_requests_quote_idx
+  on public.projetotrid_print_requests (quote_id) where quote_id is not null;
 
-alter table public.inventta3d_prints enable row level security;
-alter table public.inventta3d_print_requests enable row level security;
+alter table public.projetotrid_prints enable row level security;
+alter table public.projetotrid_print_requests enable row level security;
 
 do $$
 declare t text;
 begin
-  foreach t in array array['inventta3d_prints','inventta3d_print_requests'] loop
+  foreach t in array array['projetotrid_prints','projetotrid_print_requests'] loop
     execute format('drop policy if exists %I on public.%I', t || '_select_own', t);
     execute format('create policy %I on public.%I for select to authenticated using (auth.uid() = owner_id)', t || '_select_own', t);
     execute format('drop policy if exists %I on public.%I', t || '_insert_own', t);
@@ -69,22 +69,22 @@ end $$;
 
 -- Arquivos STL/3MF: bucket privado, 50 MB por arquivo, cada usuário só acessa a própria pasta (<id do usuário>/...).
 insert into storage.buckets (id, name, public, file_size_limit)
-values ('inventta3d-models', 'inventta3d-models', false, 52428800)
+values ('projetotrid-models', 'projetotrid-models', false, 52428800)
 on conflict (id) do update set public = false, file_size_limit = 52428800;
 
-drop policy if exists inventta3d_models_select_own on storage.objects;
-create policy inventta3d_models_select_own on storage.objects for select to authenticated
-  using (bucket_id = 'inventta3d-models' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists projetotrid_models_select_own on storage.objects;
+create policy projetotrid_models_select_own on storage.objects for select to authenticated
+  using (bucket_id = 'projetotrid-models' and (storage.foldername(name))[1] = auth.uid()::text);
 
-drop policy if exists inventta3d_models_insert_own on storage.objects;
-create policy inventta3d_models_insert_own on storage.objects for insert to authenticated
-  with check (bucket_id = 'inventta3d-models' and (storage.foldername(name))[1] = auth.uid()::text and name ~* '\.(stl|3mf)$');
+drop policy if exists projetotrid_models_insert_own on storage.objects;
+create policy projetotrid_models_insert_own on storage.objects for insert to authenticated
+  with check (bucket_id = 'projetotrid-models' and (storage.foldername(name))[1] = auth.uid()::text and name ~* '\.(stl|3mf)$');
 
-drop policy if exists inventta3d_models_update_own on storage.objects;
-create policy inventta3d_models_update_own on storage.objects for update to authenticated
-  using (bucket_id = 'inventta3d-models' and (storage.foldername(name))[1] = auth.uid()::text)
-  with check (bucket_id = 'inventta3d-models' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists projetotrid_models_update_own on storage.objects;
+create policy projetotrid_models_update_own on storage.objects for update to authenticated
+  using (bucket_id = 'projetotrid-models' and (storage.foldername(name))[1] = auth.uid()::text)
+  with check (bucket_id = 'projetotrid-models' and (storage.foldername(name))[1] = auth.uid()::text);
 
-drop policy if exists inventta3d_models_delete_own on storage.objects;
-create policy inventta3d_models_delete_own on storage.objects for delete to authenticated
-  using (bucket_id = 'inventta3d-models' and (storage.foldername(name))[1] = auth.uid()::text);
+drop policy if exists projetotrid_models_delete_own on storage.objects;
+create policy projetotrid_models_delete_own on storage.objects for delete to authenticated
+  using (bucket_id = 'projetotrid-models' and (storage.foldername(name))[1] = auth.uid()::text);

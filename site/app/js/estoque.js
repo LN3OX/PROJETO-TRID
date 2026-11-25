@@ -37,7 +37,7 @@
   async function carregar(forcar) {
     if (!pronto()) { rolos = []; carregado = false; desenhar(); dicaOrcamento(); return; }
     if (carregado && !forcar) return;
-    const { data, error } = await app().client().from('inventta3d_spools').select(COLS).limit(500);
+    const { data, error } = await app().client().from('projetotrid_spools').select(COLS).limit(500);
     if (error) { $('spoolStatus').textContent = 'Não foi possível carregar o estoque. Atualize a página para tentar novamente.'; return; }
     rolos = data || []; carregado = true; desenhar(); dicaOrcamento();
   }
@@ -93,7 +93,7 @@
     if (!dados.material) { $('spoolMsg').textContent = 'Informe o material.'; $('spoolMaterial').focus(); return; }
     if (!(dados.weight_g > 0) || !(dados.remaining_g >= 0) || dados.remaining_g > dados.weight_g || !(dados.price >= 0)) { $('spoolMsg').textContent = 'Confira os pesos: o restante não pode passar do peso do rolo.'; return; }
     if (!confirm(editando ? 'Salvar as alterações deste rolo?' : 'Salvar este novo rolo?')) return;
-    const c = app().client().from('inventta3d_spools');
+    const c = app().client().from('projetotrid_spools');
     const r = editando ? await c.update(dados).eq('id', editando.id).select(COLS).single() : await c.insert(dados).select(COLS).single();
     if (r.error) { $('spoolMsg').textContent = 'Não foi possível salvar. Tente novamente.'; return; }
     rolos = rolos.filter((x) => x.id !== r.data.id).concat(r.data);
@@ -102,7 +102,7 @@
   }
 
   async function gravarRestante(r, novo) {
-    const res = await app().client().from('inventta3d_spools').update({ remaining_g: Math.max(0, Math.round(novo * 100) / 100) }).eq('id', r.id).select(COLS).single();
+    const res = await app().client().from('projetotrid_spools').update({ remaining_g: Math.max(0, Math.round(novo * 100) / 100) }).eq('id', r.id).select(COLS).single();
     if (res.error) return null;
     rolos = rolos.map((x) => (x.id === r.id ? res.data : x)); desenhar(); dicaOrcamento();
     return res.data;
@@ -119,7 +119,7 @@
 
   async function excluir(r) {
     if (!confirm(`Excluir o rolo ${[r.material, r.color].filter(Boolean).join(' ')}?`)) return;
-    const { error } = await app().client().from('inventta3d_spools').delete().eq('id', r.id);
+    const { error } = await app().client().from('projetotrid_spools').delete().eq('id', r.id);
     if (error) { app().status('Não foi possível excluir o rolo.', true); return; }
     rolos = rolos.filter((x) => x.id !== r.id); desenhar(); dicaOrcamento();
     app().status('Rolo excluído do estoque.');

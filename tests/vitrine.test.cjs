@@ -13,6 +13,6 @@ test('mensagem "quero uma igual" leva o nome da loja e da peça', () => {
 });
 
 test('URL pública da foto codifica cada parte do caminho', () => {
-  assert.strictEqual(V.fotoUrl('https://x.supabase.co', 'u1/peça 1.jpg'), 'https://x.supabase.co/storage/v1/object/public/inventta3d-vitrine/u1/pe%C3%A7a%201.jpg');
+  assert.strictEqual(V.fotoUrl('https://x.supabase.co', 'u1/peça 1.jpg'), 'https://x.supabase.co/storage/v1/object/public/projetotrid-vitrine/u1/pe%C3%A7a%201.jpg');
   assert.strictEqual(V.fotoUrl('https://x.supabase.co', null), '');
 });

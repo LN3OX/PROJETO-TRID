@@ -1,4 +1,4 @@
-/* Projeto Trid · aprovação de acesso. Quem entra pelo Google fica "pendente" até o dono aprovar (tabela inventta3d_access no Supabase).
+/* Projeto Trid · aprovação de acesso. Quem entra pelo Google fica "pendente" até o dono aprovar (tabela projetotrid_access no Supabase).
    O bloqueio de verdade está no banco (as regras das tabelas exigem aprovação); esta tela só explica o que está acontecendo. */
 (function () {
   const app = () => window.ProjetoTridApp;
@@ -31,7 +31,7 @@
     if (!a?.client() || !usuario) { esconder(); return; }
     const vez = ++verificando;
     try {
-      const { data, error } = await a.client().rpc('inventta3d_request_access');
+      const { data, error } = await a.client().rpc('projetotrid_request_access');
       if (vez !== verificando) return;
       if (error) throw error;
       if (data === 'approved') {

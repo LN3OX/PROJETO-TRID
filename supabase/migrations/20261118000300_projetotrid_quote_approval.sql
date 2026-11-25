@@ -2,13 +2,13 @@
 -- Segurança: a tabela continua fechada ao anon. As duas funções abaixo (security definer) só funcionam com o
 -- token (uuid aleatório criado pelo dono) e só devolvem o que o cliente já veria no orçamento enviado:
 -- nome da peça, quantidade, cor, material, preço unitário e total. Custos, composição e lucro nunca saem (D17).
-alter table public.inventta3d_quotes
+alter table public.projetotrid_quotes
   add column if not exists share_token uuid unique,
   add column if not exists client_response text check (client_response in ('aprovado', 'ajuste')),
   add column if not exists client_response_at timestamptz,
   add column if not exists client_note text not null default '' check (char_length(client_note) <= 500);
 
-create or replace function public.inventta3d_quote_public(p_token uuid)
+create or replace function public.projetotrid_quote_public(p_token uuid)
 returns jsonb
 language sql
 stable
@@ -36,11 +36,11 @@ as $$
       from jsonb_array_elements(q.items) with ordinality as e(it, ord)
     ), '[]'::jsonb)
   )
-  from public.inventta3d_quotes q
+  from public.projetotrid_quotes q
   where p_token is not null and q.share_token = p_token;
 $$;
 
-create or replace function public.inventta3d_quote_respond(p_token uuid, p_decision text, p_note text default '')
+create or replace function public.projetotrid_quote_respond(p_token uuid, p_decision text, p_note text default '')
 returns text
 language plpgsql
 security definer
@@ -51,7 +51,7 @@ begin
   if p_token is null or p_decision not in ('aprovado', 'ajuste') then
     raise exception 'pedido inválido' using errcode = '22023';
   end if;
-  update public.inventta3d_quotes q
+  update public.projetotrid_quotes q
      set client_response = p_decision,
          client_response_at = now(),
          client_note = left(coalesce(p_note, ''), 500),
@@ -65,7 +65,7 @@ begin
   return v_status;
 end $$;
 
-revoke all on function public.inventta3d_quote_public(uuid) from public;
-revoke all on function public.inventta3d_quote_respond(uuid, text, text) from public;
-grant execute on function public.inventta3d_quote_public(uuid) to anon, authenticated;
-grant execute on function public.inventta3d_quote_respond(uuid, text, text) to anon, authenticated;
+revoke all on function public.projetotrid_quote_public(uuid) from public;
+revoke all on function public.projetotrid_quote_respond(uuid, text, text) from public;
+grant execute on function public.projetotrid_quote_public(uuid) to anon, authenticated;
+grant execute on function public.projetotrid_quote_respond(uuid, text, text) to anon, authenticated;

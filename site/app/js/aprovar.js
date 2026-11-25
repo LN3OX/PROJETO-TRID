@@ -1,6 +1,6 @@
 /* Projeto Trid · página pública do link de aprovação (aprovar.html?t=<token>). Sem login.
-   Lê o orçamento pela função inventta3d_quote_public (só itens, quantidades e preços; nunca custos)
-   e grava a resposta por inventta3d_quote_respond. */
+   Lê o orçamento pela função projetotrid_quote_public (só itens, quantidades e preços; nunca custos)
+   e grava a resposta por projetotrid_quote_respond. */
 (() => {
   const $ = (id) => document.getElementById(id);
   if (!$('apvMain')) return;
@@ -42,7 +42,7 @@
   async function carregar() {
     if (!cliente) return erro('Não foi possível abrir', 'Atualize a página para tentar de novo.');
     if (!/^[0-9a-f-]{36}$/i.test(token)) return erro('Link inválido', 'Confira se o link foi copiado inteiro ou peça um novo a quem enviou o orçamento.');
-    const { data: q, error } = await cliente.rpc('inventta3d_quote_public', { p_token: token });
+    const { data: q, error } = await cliente.rpc('projetotrid_quote_public', { p_token: token });
     if (error) return erro('Não foi possível abrir', 'Verifique sua conexão e atualize a página.');
     if (!q) return erro('Orçamento não encontrado', 'O link pode ter sido desativado. Peça um novo a quem enviou o orçamento.');
     mostrar(q);
@@ -53,7 +53,7 @@
     if (decisao === 'ajuste' && !nota) { $('apvMsg').textContent = 'Conte o que você quer ajustar.'; $('apvNote').focus(); return; }
     for (const b of $('apvActions').querySelectorAll('button')) b.disabled = true;
     $('apvMsg').textContent = 'Enviando…';
-    const { error } = await cliente.rpc('inventta3d_quote_respond', { p_token: token, p_decision: decisao, p_note: nota });
+    const { error } = await cliente.rpc('projetotrid_quote_respond', { p_token: token, p_decision: decisao, p_note: nota });
     if (error) {
       for (const b of $('apvActions').querySelectorAll('button')) b.disabled = false;
       $('apvMsg').textContent = 'Não foi possível enviar. Tente de novo em instantes.';

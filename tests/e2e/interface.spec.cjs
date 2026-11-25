@@ -69,8 +69,8 @@ test.describe('orçamento', () => {
     const banco = await entrar(page);
     await gerarOrcamento(page);
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
-    expect(banco.db.inventta3d_quotes[0].client_name).toBe('Rafael Cardoso');
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
+    expect(banco.db.projetotrid_quotes[0].client_name).toBe('Rafael Cardoso');
   });
 
   test('layout: etapas, resultado e diálogos sem itens fora da tela', async ({ page }) => {
@@ -512,7 +512,7 @@ test.describe('painel do mês', () => {
     await gerarOrcamento(page);
     const total = (await page.locator('#batchTotal').textContent()).trim();
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
     await page.evaluate(() => { location.hash = '#/painel'; });
     const kpi = page.locator('.dash-kpi', { hasText: 'Valor orçado' });
     await expect(kpi).toContainText(total);
@@ -560,19 +560,19 @@ test.describe('estoque de filamento', () => {
     await expect(page.locator('#spoolMsg')).toContainText('restante não pode passar');
     await page.locator('#spoolRemaining').fill('500');
     await page.locator('#spoolSave').click();
-    await expect.poll(() => banco.db.inventta3d_spools.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_spools.length).toBe(1);
     await expect(page.locator('#spoolList')).toContainText('500 g de 1.000 g (50%)');
     await page.evaluate(() => { location.hash = '#top'; });
     await gerarOrcamento(page, { peca: 'Peça do estoque' });
     await page.locator('#savePrintBtn').click();
     await page.locator('#printSaveBtn').click();
-    await expect.poll(() => Number(banco.db.inventta3d_spools[0].remaining_g), { timeout: 20000 }).toBe(462); // 500 − 38 g (duas gravações em sequência)
+    await expect.poll(() => Number(banco.db.projetotrid_spools[0].remaining_g), { timeout: 20000 }).toBe(462); // 500 − 38 g (duas gravações em sequência)
     await expect(page.locator('#accountStatus')).toContainText('ficou com 462 g');
   });
 
   test('etapa 2 mostra quanto há do material e avisa quando não basta', async ({ page }) => {
     const banco = await entrar(page);
-    banco.db.inventta3d_spools.push({ id: 'rolo-1', owner_id: 'x', material: 'PLA', color: 'Preto', brand: '', weight_g: 1000, remaining_g: 100, price: 0, notes: '', created_at: new Date().toISOString() });
+    banco.db.projetotrid_spools.push({ id: 'rolo-1', owner_id: 'x', material: 'PLA', color: 'Preto', brand: '', weight_g: 1000, remaining_g: 100, price: 0, notes: '', created_at: new Date().toISOString() });
     await page.evaluate(() => window.ProjetoTridEstoque.recarregar());
     await page.getByRole('textbox', { name: 'Nome da peça' }).fill('Peça');
     await page.locator('.panel[data-panel="0"] .btn-next').click();
@@ -600,19 +600,19 @@ test.describe('pedidos (status, entrega, retorno e etiqueta)', () => {
     const banco = await entrar(page);
     await gerarOrcamento(page, { peca: 'Suporte status' });
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
     await page.evaluate(() => { location.hash = '#/orcamentos-salvos'; });
     const linha = page.locator('#savedQuoteList .saved-quote-row', { hasText: 'Suporte status' });
     await expect(linha.getByRole('combobox', { name: /Status de/ })).toHaveValue('orcado');
     await linha.getByRole('combobox', { name: /Status de/ }).selectOption('imprimindo');
-    await expect.poll(() => banco.db.inventta3d_quotes[0].status).toBe('imprimindo');
-    expect(banco.db.inventta3d_quotes[0].status_at).toBeTruthy();
+    await expect.poll(() => banco.db.projetotrid_quotes[0].status).toBe('imprimindo');
+    expect(banco.db.projetotrid_quotes[0].status_at).toBeTruthy();
     await filtrar(page, 'Orçados');
     await expect(page.locator('#savedQuoteList .saved-quote-row')).toHaveCount(0);
     await filtrar(page, 'Em produção');
     await expect(linha).toBeVisible();
     await linha.getByLabel(/Entrega de/).fill('2020-01-10');
-    await expect.poll(() => banco.db.inventta3d_quotes[0].due_date).toBe('2020-01-10');
+    await expect.poll(() => banco.db.projetotrid_quotes[0].due_date).toBe('2020-01-10');
     await expect(linha.locator('.order-chip', { hasText: 'Atrasado' })).toBeVisible();
     await filtrar(page, 'Atrasados');
     await expect(page.locator('#savedQuoteList .saved-quote-row')).toHaveCount(1);
@@ -620,7 +620,7 @@ test.describe('pedidos (status, entrega, retorno e etiqueta)', () => {
 
   test('orçamento sem resposta há dias oferece lembrete pelo WhatsApp; etiqueta tem QR', async ({ page }) => {
     const banco = await entrar(page);
-    banco.db.inventta3d_quotes.push(antigo(5));
+    banco.db.projetotrid_quotes.push(antigo(5));
     await page.evaluate(() => { location.hash = '#/orcamentos-salvos'; });
     const linha = page.locator('#savedQuoteList .saved-quote-row', { hasText: 'Vaso geométrico' });
     await expect(linha).toContainText('Sem resposta há 5 dias');
@@ -638,7 +638,7 @@ test.describe('pedidos (status, entrega, retorno e etiqueta)', () => {
 
   test('o link do QR abre a lista com o pedido destacado', async ({ page }) => {
     const banco = await entrar(page);
-    banco.db.inventta3d_quotes.push(antigo(1, { status: 'pronto' }));
+    banco.db.projetotrid_quotes.push(antigo(1, { status: 'pronto' }));
     await page.goto('/app/?pedido=ped-antigo#/orcamentos-salvos');
     await expect(page.locator('#savedQuoteList .saved-quote-row.order-destaque')).toContainText('Vaso geométrico');
   });
@@ -653,7 +653,7 @@ test.describe('impressoras e manutenção', () => {
     await page.locator('#printerName').fill('A1 da bancada');
     await page.locator('#printerHours').fill('100');
     await page.locator('#printerSave').click();
-    await expect.poll(() => banco.db.inventta3d_printers.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_printers.length).toBe(1);
     const card = page.locator('.printer-card', { hasText: 'A1 da bancada' });
     await expect(card).toContainText('Bambu Lab A1 · 100 h de impressão');
     await expect(card.locator('.printer-tasks li')).toHaveCount(4);
@@ -665,7 +665,7 @@ test.describe('impressoras e manutenção', () => {
     await card.getByRole('button', { name: 'Marcar como feito: Limpar e lubrificar os eixos' }).click();
     await expect(card.locator('.printer-tasks li').first()).toContainText('Faltam 200 h');
     await expect(card.locator('.printer-log')).toContainText('1 manutenção registrada · R$ 12,50 gastos');
-    expect(banco.db.inventta3d_printers[0].log[0]).toMatchObject({ tarefa: 'Limpar e lubrificar os eixos', custo: 12.5 });
+    expect(banco.db.projetotrid_printers[0].log[0]).toMatchObject({ tarefa: 'Limpar e lubrificar os eixos', custo: 12.5 });
   });
 });
 
@@ -674,14 +674,14 @@ test.describe('link de aprovação', () => {
     const banco = await entrar(page);
     await gerarOrcamento(page, { peca: 'Luminária lua' });
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
     await page.evaluate(() => { location.hash = '#/orcamentos-salvos'; });
     const maisAcoes = page.locator('#savedQuoteList .saved-quote-row', { hasText: 'Luminária lua' }).locator('.order-more-btn'); // no celular, "Enviar link" fica no menu "Mais"
     if (await maisAcoes.isVisible()) await maisAcoes.click();
     await page.getByRole('button', { name: 'Link de aprovação de Luminária lua' }).click();
-    await expect.poll(() => banco.db.inventta3d_quotes[0].share_token).toMatch(/^[0-9a-f-]{36}$/);
+    await expect.poll(() => banco.db.projetotrid_quotes[0].share_token).toMatch(/^[0-9a-f-]{36}$/);
     await expect(page.locator('#accountStatus')).toContainText('Link de aprovação copiado');
-    const token = banco.db.inventta3d_quotes[0].share_token;
+    const token = banco.db.projetotrid_quotes[0].share_token;
 
     const cliente = await context.newPage(); // visitante sem login, mesmo banco falso
     await cliente.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
@@ -695,7 +695,7 @@ test.describe('link de aprovação', () => {
     await cliente.getByRole('button', { name: 'Aprovar orçamento' }).click();
     await expect(cliente.locator('#apvMsg')).toContainText('Orçamento aprovado');
     await expect(cliente.locator('#apvActions')).toBeHidden();
-    expect(banco.db.inventta3d_quotes[0].status).toBe('aprovado');
+    expect(banco.db.projetotrid_quotes[0].status).toBe('aprovado');
 
     await page.reload();
     await page.evaluate(() => { location.hash = '#/orcamentos-salvos'; });
@@ -706,7 +706,7 @@ test.describe('link de aprovação', () => {
 
   test('cliente pede ajuste com mensagem; link inválido mostra aviso', async ({ page }) => {
     const banco = bancoFalso();
-    banco.db.inventta3d_quotes.push({ id: 'q1', title: 'Vaso', client_name: 'Ana Lima', total: 50, subtotal: 50, discount_amount: 0, created_at: new Date().toISOString(), share_token: '11111111-2222-3333-4444-555555555555', items: [{ data: { product: 'Vaso', filamentType: 'PLA' }, result: { q: 2, unitPrice: 25, cost: 9, profit: 12 } }] });
+    banco.db.projetotrid_quotes.push({ id: 'q1', title: 'Vaso', client_name: 'Ana Lima', total: 50, subtotal: 50, discount_amount: 0, created_at: new Date().toISOString(), share_token: '11111111-2222-3333-4444-555555555555', items: [{ data: { product: 'Vaso', filamentType: 'PLA' }, result: { q: 2, unitPrice: 25, cost: 9, profit: 12 } }] });
     await page.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
     await page.goto('/app/aprovar.html?t=11111111-2222-3333-4444-555555555555');
     await expect(page.locator('#apvItems')).toContainText('2× Vaso');
@@ -717,8 +717,8 @@ test.describe('link de aprovação', () => {
     await page.getByLabel('O que você quer ajustar?').fill('Quero em azul');
     await page.getByRole('button', { name: 'Enviar pedido de ajuste' }).click();
     await expect(page.locator('#apvMsg')).toContainText('Você pediu um ajuste');
-    expect(banco.db.inventta3d_quotes[0]).toMatchObject({ client_response: 'ajuste', client_note: 'Quero em azul' });
-    expect(banco.db.inventta3d_quotes[0].status || 'orcado').toBe('orcado');
+    expect(banco.db.projetotrid_quotes[0]).toMatchObject({ client_response: 'ajuste', client_note: 'Quero em azul' });
+    expect(banco.db.projetotrid_quotes[0].status || 'orcado').toBe('orcado');
     await page.goto('/app/aprovar.html?t=nao-existe');
     await expect(page.locator('#apvTitle')).toHaveText('Link inválido');
     const achados = await auditar(page, '#apvMain');
@@ -735,7 +735,7 @@ test.describe('vitrine pública', () => {
     await gerarOrcamento(page, { peca: 'Vaso espiral' });
     await page.locator('#savePrintBtn').click();
     await page.locator('#printSaveBtn').click();
-    await expect.poll(() => banco.db.inventta3d_prints.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_prints.length).toBe(1);
     await page.evaluate(() => { location.hash = '#/impressoes'; });
     await page.getByRole('tab', { name: 'Vitrine' }).click();
     await page.locator('#shopName').fill('Ateliê da Ana');
@@ -746,8 +746,8 @@ test.describe('vitrine pública', () => {
     await expect(page.locator('#shopMsg')).toContainText('WhatsApp');
     await page.locator('#shopWhats').fill('(21) 99876-5432');
     await page.locator('#shopSave').click();
-    await expect.poll(() => banco.db.inventta3d_shop.length).toBe(1);
-    expect(banco.db.inventta3d_shop[0]).toMatchObject({ slug: 'atelie-da-ana', whatsapp: '21998765432', enabled: true });
+    await expect.poll(() => banco.db.projetotrid_shop.length).toBe(1);
+    expect(banco.db.projetotrid_shop[0]).toMatchObject({ slug: 'atelie-da-ana', whatsapp: '21998765432', enabled: true });
     await expect(page.locator('#shopLink')).toContainText('vitrine.html?loja=atelie-da-ana');
     await expect(page.locator('#shopCopy')).toBeVisible();
 
@@ -759,8 +759,8 @@ test.describe('vitrine pública', () => {
     await caixa.getByLabel('Descrição na vitrine').fill('Vaso decorativo em PLA silk');
     await caixa.getByLabel('Foto da peça para a vitrine').setInputFiles({ name: 'vaso.png', mimeType: 'image/png', buffer: png });
     await caixa.getByRole('button', { name: 'Salvar vitrine' }).click();
-    await expect.poll(() => banco.db.inventta3d_prints[0].showcase).toBe(true);
-    expect(banco.db.inventta3d_prints[0].photo_path).toMatch(/\.png$/);
+    await expect.poll(() => banco.db.projetotrid_prints[0].showcase).toBe(true);
+    expect(banco.db.projetotrid_prints[0].photo_path).toMatch(/\.png$/);
 
     const visitante = await context.newPage();
     await visitante.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
@@ -776,7 +776,7 @@ test.describe('vitrine pública', () => {
 
   test('vitrine desativada ou endereço inválido mostram aviso', async ({ page }) => {
     const banco = bancoFalso();
-    banco.db.inventta3d_shop.push({ owner_id: 'x', slug: 'fechada', name: 'Loja', whatsapp: '21998765432', intro: '', enabled: false });
+    banco.db.projetotrid_shop.push({ owner_id: 'x', slug: 'fechada', name: 'Loja', whatsapp: '21998765432', intro: '', enabled: false });
     await page.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
     await page.goto('/app/vitrine.html?loja=fechada');
     await expect(page.locator('#vitTitle')).toHaveText('Vitrine não encontrada');
@@ -883,7 +883,7 @@ test.describe('clientes', () => {
     await expect(page.locator('#customerPhone')).toHaveValue('(11) 99988-7766');
     await page.locator('#customerSave').click();
     await expect(page.locator('#customerList')).toContainText('Maria Souza');
-    expect(banco.db.inventta3d_customers).toHaveLength(1);
+    expect(banco.db.projetotrid_customers).toHaveLength(1);
     await page.locator('#customerList').getByRole('button', { name: 'Editar' }).click();
     await page.locator('#customerName').fill('Maria de Souza');
     await page.locator('#customerSave').click();
@@ -893,7 +893,7 @@ test.describe('clientes', () => {
     await page.locator('#customerSearch').fill('');
     await page.locator('#customerList').getByRole('button', { name: 'Excluir' }).click();
     await expect(page.getByText('Nenhum cliente salvo ainda').first()).toBeVisible();
-    expect(banco.db.inventta3d_customers).toHaveLength(0);
+    expect(banco.db.projetotrid_customers).toHaveLength(0);
   });
 
   test('salvar cliente a partir do orçamento não duplica', async ({ page }) => {
@@ -902,11 +902,11 @@ test.describe('clientes', () => {
     await page.locator('#clientName').fill('Ana Lima');
     await page.locator('#clientEmail').fill('ana@exemplo.com');
     await page.locator('#saveCustomerBtn').click();
-    await expect.poll(() => banco.db.inventta3d_customers.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_customers.length).toBe(1);
     await page.locator('#clientName').fill('Ana Lima Santos');
     await page.locator('#saveCustomerBtn').click();
-    await expect.poll(() => banco.db.inventta3d_customers[0].name).toBe('Ana Lima Santos');
-    expect(banco.db.inventta3d_customers).toHaveLength(1);
+    await expect.poll(() => banco.db.projetotrid_customers[0].name).toBe('Ana Lima Santos');
+    expect(banco.db.projetotrid_customers).toHaveLength(1);
     // com cliente salvo, o seletor "Cliente salvo" alinha com o campo Telefone ao lado
     await expect(page.locator('#customerPick')).toBeVisible();
     const topo = (sel) => page.locator(sel).evaluate((e) => Math.round(e.getBoundingClientRect().top));
@@ -923,9 +923,9 @@ test.describe('histórico de impressões', () => {
     await expect(page.locator('#printSaveDialog')).toContainText('anexar o arquivo');
     await page.locator('#printFile0').setInputFiles({ name: 'suporte.stl', mimeType: 'model/stl', buffer: Buffer.from('solid x') });
     await page.locator('#printSaveBtn').click();
-    await expect.poll(() => banco.db.inventta3d_prints.length).toBe(1);
-    await expect.poll(() => banco.db.inventta3d_print_requests.length).toBe(1);
-    await expect.poll(() => banco.db.inventta3d_prints[0].file_name).toBe('suporte.stl');
+    await expect.poll(() => banco.db.projetotrid_prints.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_print_requests.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_prints[0].file_name).toBe('suporte.stl');
     await page.evaluate(() => { location.hash = '#/impressoes'; });
     await expect(page.locator('#printList')).toContainText('Suporte raquete');
     await expect(page.locator('#printList')).toContainText('Arquivo: suporte.stl');
@@ -934,7 +934,7 @@ test.describe('histórico de impressões', () => {
     await expect(page.locator('#printDetailDialog').getByRole('button', { name: 'Baixar' })).toBeVisible();
     await page.locator('#printDetailDelete').click();
     await expect(page.locator('#printStatus')).toContainText('Nenhuma impressão salva');
-    expect(banco.db.inventta3d_prints).toHaveLength(0);
+    expect(banco.db.projetotrid_prints).toHaveLength(0);
   });
 
   test('orçar de novo: a peça do histórico preenche o novo orçamento', async ({ page }) => {
@@ -942,8 +942,8 @@ test.describe('histórico de impressões', () => {
     await gerarOrcamento(page, { peca: 'Suporte repetido' });
     await page.locator('#savePrintBtn').click();
     await page.locator('#printSaveBtn').click();
-    await expect.poll(() => banco.db.inventta3d_prints.length).toBe(1);
-    const salvo = banco.db.inventta3d_prints[0];
+    await expect.poll(() => banco.db.projetotrid_prints.length).toBe(1);
+    const salvo = banco.db.projetotrid_prints[0];
     await page.evaluate(() => { const p = document.getElementById('product'); p.value = 'Outra peça'; p.dispatchEvent(new Event('input', { bubbles: true })); });
     await page.evaluate(() => { location.hash = '#/impressoes'; });
     await page.getByRole('button', { name: 'Orçar de novo: Suporte repetido' }).click();
@@ -961,7 +961,7 @@ test.describe('histórico de impressões', () => {
     await page.locator('#savePrintBtn').click();
     await page.locator('#printFile0').setInputFiles(cuboSTL(20, 'cubo.stl'));
     await page.locator('#printSaveBtn').click();
-    await expect.poll(() => banco.db.inventta3d_prints[0]?.file_name).toBe('cubo.stl');
+    await expect.poll(() => banco.db.projetotrid_prints[0]?.file_name).toBe('cubo.stl');
     await page.evaluate(() => { location.hash = '#/impressoes'; });
     await page.locator('#printList').getByRole('button', { name: 'Detalhes' }).click();
     await page.locator('#printDetailDialog').getByRole('button', { name: 'Ver em 3D' }).click();
@@ -978,7 +978,7 @@ test.describe('histórico de impressões', () => {
     await page.locator('#printFile0').setInputFiles({ name: 'foto.png', mimeType: 'image/png', buffer: Buffer.from('x') });
     await page.locator('#printSaveBtn').click();
     await expect(page.locator('#printSaveMsg')).toContainText('não é um arquivo STL ou 3MF');
-    expect(banco.db.inventta3d_prints).toHaveLength(0);
+    expect(banco.db.projetotrid_prints).toHaveLength(0);
   });
 });
 
@@ -1012,37 +1012,37 @@ test.describe('confirmação antes de salvar e excluir', () => {
     await page.locator('#saveQuoteBtn').click();
     await expect.poll(() => page.confirmacoes.length).toBe(1);
     expect(page.confirmacoes[0]).toContain('Salvar este orçamento');
-    expect(banco.db.inventta3d_quotes).toHaveLength(0);
+    expect(banco.db.projetotrid_quotes).toHaveLength(0);
     page.responder = true;
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
   });
 
   test('adicionar item a um orçamento já salvo atualiza o MESMO orçamento (2 itens), sem criar outro', async ({ page }) => {
     const banco = await entrar(page);
     await gerarOrcamento(page, { peca: 'Primeira' });
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
     await page.locator('#addQuoteBtn').click();
     await gerarOrcamento(page, { peca: 'Segunda' });
     await expect(page.locator('#quoteItems .quote-item')).toHaveCount(2);
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes[0].items.length).toBe(2);
-    expect(banco.db.inventta3d_quotes).toHaveLength(1);
-    expect(banco.db.inventta3d_quotes[0].title).toContain('Primeira');
-    expect(banco.db.inventta3d_quotes[0].title).toContain('Segunda');
+    await expect.poll(() => banco.db.projetotrid_quotes[0].items.length).toBe(2);
+    expect(banco.db.projetotrid_quotes).toHaveLength(1);
+    expect(banco.db.projetotrid_quotes[0].title).toContain('Primeira');
+    expect(banco.db.projetotrid_quotes[0].title).toContain('Segunda');
   });
 
   test('pedido novo (Limpar pedido) depois de salvar cria outro orçamento e não sobrescreve o anterior', async ({ page }) => {
     const banco = await entrar(page);
     await gerarOrcamento(page, { peca: 'Pedido um' });
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(1);
     await page.getByRole('button', { name: 'Limpar pedido' }).click();
     await gerarOrcamento(page, { peca: 'Pedido dois' });
     await page.locator('#saveQuoteBtn').click();
-    await expect.poll(() => banco.db.inventta3d_quotes.length).toBe(2);
-    expect(banco.db.inventta3d_quotes.map((q) => q.title).sort()).toEqual(['Pedido dois', 'Pedido um']);
+    await expect.poll(() => banco.db.projetotrid_quotes.length).toBe(2);
+    expect(banco.db.projetotrid_quotes.map((q) => q.title).sort()).toEqual(['Pedido dois', 'Pedido um']);
   });
 
   test('salvar cliente a partir do orçamento: cancelar não grava', async ({ page }) => {
@@ -1052,7 +1052,7 @@ test.describe('confirmação antes de salvar e excluir', () => {
     await page.locator('#saveCustomerBtn').click();
     await expect.poll(() => page.confirmacoes.length).toBe(1);
     expect(page.confirmacoes[0]).toContain('Salvar este cliente');
-    expect(banco.db.inventta3d_customers).toHaveLength(0);
+    expect(banco.db.projetotrid_customers).toHaveLength(0);
   });
 
   test('excluir cliente e rolo: cancelar mantém o registro', async ({ page }) => {
@@ -1061,13 +1061,13 @@ test.describe('confirmação antes de salvar e excluir', () => {
     await page.locator('#newCustomerBtn').click();
     await page.locator('#customerName').fill('Maria Souza');
     await page.locator('#customerSave').click();
-    await expect.poll(() => banco.db.inventta3d_customers.length).toBe(1);
+    await expect.poll(() => banco.db.projetotrid_customers.length).toBe(1);
     expect(page.confirmacoes[0]).toContain('Salvar este novo cliente');
     page.responder = false;
     await page.locator('#customerList').getByRole('button', { name: 'Excluir' }).click();
     await expect.poll(() => page.confirmacoes.length).toBe(2);
     expect(page.confirmacoes[1]).toContain('Excluir');
-    expect(banco.db.inventta3d_customers).toHaveLength(1);
+    expect(banco.db.projetotrid_customers).toHaveLength(1);
   });
 });
 

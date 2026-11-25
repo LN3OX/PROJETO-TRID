@@ -12,7 +12,7 @@
 - `site/`: HTML, CSS e JS puros, sem build. Material 3 via tokens em `site/css/tokens.css`.
 - Módulos de tela: `site/js/modules.js` (registro) + uma `<main data-page>` no `index.html`. Guia em `MODULOS.md`.
 - `site/js/app.js` guarda o app dentro de uma função anônima (IIFE): funções e estado não ficam acessíveis no console. O que precisa ser compartilhado sai por `window.ProjetoTridApp`.
-- Banco: tabelas `inventta3d_quotes` e `inventta3d_customers`, ambas com RLS por dono. Migrações em `supabase/migrations/`.
+- Banco: tabelas `projetotrid_quotes` e `projetotrid_customers`, ambas com RLS por dono. Migrações em `supabase/migrations/`.
 
 ## Comandos
 - Testes: `npm test` (cálculo e **estrutura**: ids, módulos, ícones, service worker, CSS só com tokens, bordas, RLS, segredos; roda no deploy e bloqueia se falhar)

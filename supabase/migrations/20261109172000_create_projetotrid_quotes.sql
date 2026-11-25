@@ -1,4 +1,4 @@
-create table if not exists public.inventta3d_quotes (
+create table if not exists public.projetotrid_quotes (
   id uuid primary key default gen_random_uuid(),
   owner_id uuid not null default auth.uid() references auth.users(id) on delete cascade,
   title text not null default 'Orçamento',
@@ -17,29 +17,29 @@ create table if not exists public.inventta3d_quotes (
   updated_at timestamptz not null default now()
 );
 
-alter table public.inventta3d_quotes enable row level security;
+alter table public.projetotrid_quotes enable row level security;
 
-drop policy if exists inventta3d_quotes_select_own on public.inventta3d_quotes;
-create policy inventta3d_quotes_select_own
-  on public.inventta3d_quotes for select to authenticated
+drop policy if exists projetotrid_quotes_select_own on public.projetotrid_quotes;
+create policy projetotrid_quotes_select_own
+  on public.projetotrid_quotes for select to authenticated
   using (auth.uid() = owner_id);
 
-drop policy if exists inventta3d_quotes_insert_own on public.inventta3d_quotes;
-create policy inventta3d_quotes_insert_own
-  on public.inventta3d_quotes for insert to authenticated
+drop policy if exists projetotrid_quotes_insert_own on public.projetotrid_quotes;
+create policy projetotrid_quotes_insert_own
+  on public.projetotrid_quotes for insert to authenticated
   with check (auth.uid() = owner_id);
 
-drop policy if exists inventta3d_quotes_update_own on public.inventta3d_quotes;
-create policy inventta3d_quotes_update_own
-  on public.inventta3d_quotes for update to authenticated
+drop policy if exists projetotrid_quotes_update_own on public.projetotrid_quotes;
+create policy projetotrid_quotes_update_own
+  on public.projetotrid_quotes for update to authenticated
   using (auth.uid() = owner_id)
   with check (auth.uid() = owner_id);
 
-drop policy if exists inventta3d_quotes_delete_own on public.inventta3d_quotes;
-create policy inventta3d_quotes_delete_own
-  on public.inventta3d_quotes for delete to authenticated
+drop policy if exists projetotrid_quotes_delete_own on public.projetotrid_quotes;
+create policy projetotrid_quotes_delete_own
+  on public.projetotrid_quotes for delete to authenticated
   using (auth.uid() = owner_id);
 
-grant select, insert, update, delete on table public.inventta3d_quotes to authenticated;
-create index if not exists inventta3d_quotes_owner_created_idx
-  on public.inventta3d_quotes (owner_id, created_at desc);
+grant select, insert, update, delete on table public.projetotrid_quotes to authenticated;
+create index if not exists projetotrid_quotes_owner_created_idx
+  on public.projetotrid_quotes (owner_id, created_at desc);

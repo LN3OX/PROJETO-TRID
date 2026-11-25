@@ -24,14 +24,14 @@ function orcamento(id, cliente, itens, dias, status, extra = {}) {
 }
 
 function semear(db) {
-  db.inventta3d_customers.push(
+  db.projetotrid_customers.push(
     { id: 'c1', owner_id: 'x', name: 'Marina Souza', email: 'marina@exemplo.com', phone: '(11) 90000-0001', notes: 'Prefere vermelho e verde', created_at: dia(40) },
     { id: 'c2', owner_id: 'x', name: 'Rafael Cardoso', email: 'rafael@exemplo.com', phone: '(11) 90000-0002', notes: 'Pedidos de brindes para a empresa', created_at: dia(32) },
     { id: 'c3', owner_id: 'x', name: 'Ana Lima', email: 'ana@exemplo.com', phone: '(21) 90000-0003', notes: '', created_at: dia(25) },
     { id: 'c4', owner_id: 'x', name: 'Studio Prisma', email: 'contato@exemplo.com', phone: '(31) 90000-0004', notes: 'Peças de decoração em lote', created_at: dia(18) },
     { id: 'c5', owner_id: 'x', name: 'Carlos Mendes', email: 'carlos@exemplo.com', phone: '(11) 90000-0005', notes: '', created_at: dia(9) },
   );
-  db.inventta3d_quotes.push(
+  db.projetotrid_quotes.push(
     orcamento('q1', 'Marina Souza', [peca('Vaso decorativo', 12, 38, '03:40', 'Vermelho')], 1, 'orcado'),
     orcamento('q2', 'Rafael Cardoso', [peca('Chaveiro com logo', 50, 6, '00:25', 'Preto'), peca('Suporte de mesa', 10, 55, '02:10', 'Cinza')], 3, 'imprimindo'),
     orcamento('q3', 'Studio Prisma', [peca('Luminária geométrica', 6, 120, '07:30', 'Branco')], 5, 'aprovado'),
@@ -40,17 +40,17 @@ function semear(db) {
     orcamento('q6', 'Marina Souza', [peca('Enfeite de Natal', 30, 14, '00:50', 'Vermelho')], 14, 'entregue'),
     orcamento('q7', 'Rafael Cardoso', [peca('Placa de mesa', 8, 30, '01:40', 'Grafite')], 17, 'recusado'),
   );
-  const imp = (id, name, material, color, g, min, custo, pedidos) => ({ id, owner_id: 'x', name, material, color, weight_g: g, print_minutes: min, material_cost: custo * 0.4, energy_cost: custo * 0.1, machine_cost: custo * 0.5, print_cost: custo, file_path: null, file_name: `${name.toLowerCase().replace(/ /g, '_')}.3mf`, file_size: 2400000, showcase: false, showcase_price: null, showcase_text: '', photo_path: null, created_at: dia(30), updated_at: dia(2), inventta3d_print_requests: pedidos.map(([cid, cn, q, d], i) => ({ id: `${id}-r${i}`, customer_id: cid, customer_name: cn, quantity: q, unit_print_cost: custo, requested_at: dia(d), quote_id: null })) });
-  db.inventta3d_prints.push(
+  const imp = (id, name, material, color, g, min, custo, pedidos) => ({ id, owner_id: 'x', name, material, color, weight_g: g, print_minutes: min, material_cost: custo * 0.4, energy_cost: custo * 0.1, machine_cost: custo * 0.5, print_cost: custo, file_path: null, file_name: `${name.toLowerCase().replace(/ /g, '_')}.3mf`, file_size: 2400000, showcase: false, showcase_price: null, showcase_text: '', photo_path: null, created_at: dia(30), updated_at: dia(2), projetotrid_print_requests: pedidos.map(([cid, cn, q, d], i) => ({ id: `${id}-r${i}`, customer_id: cid, customer_name: cn, quantity: q, unit_print_cost: custo, requested_at: dia(d), quote_id: null })) });
+  db.projetotrid_prints.push(
     imp('p1', 'Vaso decorativo', 'PLA', 'Vermelho', 38, 220, 6.4, [['c1', 'Marina Souza', 12, 1]]),
     imp('p2', 'Chaveiro com logo', 'PLA', 'Preto', 6, 25, 1.1, [['c2', 'Rafael Cardoso', 50, 3]]),
     imp('p3', 'Luminária geométrica', 'PETG', 'Branco', 120, 450, 19.8, [['c4', 'Studio Prisma', 6, 5]]),
     imp('p4', 'Organizador de cabos', 'PLA', 'Preto', 18, 65, 3.2, [['c5', 'Carlos Mendes', 20, 11]]),
   );
   // o banco falso junta os pedidos de impressão pela tabela própria
-  for (const pr of db.inventta3d_prints) db.inventta3d_print_requests.push(...pr.inventta3d_print_requests.map((r) => ({ ...r, print_id: pr.id })));
+  for (const pr of db.projetotrid_prints) db.projetotrid_print_requests.push(...pr.projetotrid_print_requests.map((r) => ({ ...r, print_id: pr.id })));
   // meses anteriores, para o gráfico do painel
-  db.inventta3d_quotes.push(
+  db.projetotrid_quotes.push(
     orcamento('q8', 'Ana Lima', [peca('Porta-lápis', 10, 45, '02:50', 'Azul')], 40, 'entregue'),
     orcamento('q9', 'Rafael Cardoso', [peca('Chaveiro com logo', 30, 6, '00:25', 'Preto')], 48, 'entregue'),
     orcamento('q10', 'Studio Prisma', [peca('Luminária geométrica', 4, 120, '07:30', 'Branco')], 75, 'entregue'),

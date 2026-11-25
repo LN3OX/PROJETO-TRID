@@ -3,8 +3,8 @@ const assert = require('node:assert');
 const M = require('../site/app/js/manutencao.js');
 
 const imps = [
-  { print_minutes: 90, inventta3d_print_requests: [{ quantity: 2, requested_at: '2026-11-10T10:00:00Z' }, { quantity: 4, requested_at: '2026-10-01T10:00:00Z' }] },
-  { print_minutes: 30, inventta3d_print_requests: [{ quantity: 1, requested_at: '2026-11-12T10:00:00Z' }] },
+  { print_minutes: 90, projetotrid_print_requests: [{ quantity: 2, requested_at: '2026-11-10T10:00:00Z' }, { quantity: 4, requested_at: '2026-10-01T10:00:00Z' }] },
+  { print_minutes: 30, projetotrid_print_requests: [{ quantity: 1, requested_at: '2026-11-12T10:00:00Z' }] },
 ];
 
 test('horímetro: valor informado + pedidos depois dele, só quando há uma impressora', () => {

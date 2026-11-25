@@ -19,7 +19,7 @@
   function horasDesde(impressoes, desde) {
     const t = new Date(desde).getTime();
     let min = 0;
-    for (const p of impressoes) for (const r of p.inventta3d_print_requests || []) if (new Date(r.requested_at).getTime() > t) min += (Number(p.print_minutes) || 0) * (Number(r.quantity) || 0);
+    for (const p of impressoes) for (const r of p.projetotrid_print_requests || []) if (new Date(r.requested_at).getTime() > t) min += (Number(p.print_minutes) || 0) * (Number(r.quantity) || 0);
     return min / 60;
   }
   const horimetro = (imp, impressoes, unica) => (Number(imp.hours) || 0) + (unica ? horasDesde(impressoes, imp.hours_at) : 0);
@@ -51,15 +51,15 @@
     if (!(app()?.client() && app()?.user())) { maquinas = []; carregado = false; return desenhar(); }
     const c = app().client();
     const [m, p] = await Promise.all([
-      c.from('inventta3d_printers').select(COLS).limit(50),
-      c.from('inventta3d_prints').select('id,print_minutes,inventta3d_print_requests(id,quantity,requested_at)').limit(1000),
+      c.from('projetotrid_printers').select(COLS).limit(50),
+      c.from('projetotrid_prints').select('id,print_minutes,projetotrid_print_requests(id,quantity,requested_at)').limit(1000),
     ]);
     if (m.error || p.error) { $('printerStatus').textContent = 'Não foi possível carregar as impressoras. Atualize a página para tentar novamente.'; return; }
     maquinas = m.data || []; impressoes = p.data || []; carregado = true; desenhar();
   }
 
   async function gravar(imp, campos, msg) {
-    const r = await app().client().from('inventta3d_printers').update(campos).eq('id', imp.id).select(COLS).single();
+    const r = await app().client().from('projetotrid_printers').update(campos).eq('id', imp.id).select(COLS).single();
     if (r.error) { app().status('Não foi possível salvar a impressora.', true); return null; }
     maquinas = maquinas.map((x) => (x.id === imp.id ? r.data : x)); desenhar();
     if (msg) app().status(msg);
@@ -144,7 +144,7 @@
     if (!name) { $('printerMsg').textContent = 'Dê um nome à impressora (ex.: A1 da bancada).'; $('printerName').focus(); return; }
     if (!(hours >= 0)) { $('printerMsg').textContent = 'Informe as horas como número.'; return; }
     if (!confirm(editando ? 'Salvar as alterações desta impressora?' : 'Salvar esta nova impressora?')) return;
-    const c = app().client().from('inventta3d_printers');
+    const c = app().client().from('projetotrid_printers');
     const dados = editando ? { name, model, ...(Number(editando.hours) !== hours ? { hours, hours_at: new Date().toISOString() } : {}) } : { name, model, hours, hours_at: new Date().toISOString(), tasks: N.novasTarefas(hours), log: [] };
     const r = editando ? await c.update(dados).eq('id', editando.id).select(COLS).single() : await c.insert(dados).select(COLS).single();
     if (r.error) { $('printerMsg').textContent = 'Não foi possível salvar. Tente novamente.'; return; }
@@ -155,7 +155,7 @@
 
   async function excluir(imp) {
     if (!confirm(`Excluir ${imp.name} e o registro de manutenção?`)) return;
-    const { error } = await app().client().from('inventta3d_printers').delete().eq('id', imp.id);
+    const { error } = await app().client().from('projetotrid_printers').delete().eq('id', imp.id);
     if (error) { app().status('Não foi possível excluir a impressora.', true); return; }
     maquinas = maquinas.filter((x) => x.id !== imp.id); desenhar();
     app().status('Impressora excluída.');

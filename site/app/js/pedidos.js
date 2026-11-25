@@ -59,7 +59,7 @@
   document.addEventListener('click', (e) => { if (!pequeno.matches) return; document.querySelectorAll('.order-more[open]').forEach((d) => { if (!d.contains(e.target)) d.open = false; }); });
 
   async function gravar(r, campos, msg) {
-    const { error } = await app().client().from('inventta3d_quotes').update(campos).eq('id', r.id);
+    const { error } = await app().client().from('projetotrid_quotes').update(campos).eq('id', r.id);
     if (error) { app().status('Não foi possível atualizar o pedido. Tente novamente.', true); return false; }
     Object.assign(r, campos);
     app().renderSaved?.();

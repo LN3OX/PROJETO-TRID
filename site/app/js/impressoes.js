@@ -3,8 +3,8 @@
    e opcionalmente o arquivo STL/3MF. Usa window.ProjetoTridApp (app.js) e window.ProjetoTridCustomers (clientes.js). */
 (()=>{
   const $=id=>document.getElementById(id),app=()=>window.ProjetoTridApp;
-  const BUCKET='inventta3d-models',MAX_FILE=50*1024*1024,EXT=/\.(stl|3mf)$/i;
-  const COLS='id,name,material,color,weight_g,print_minutes,material_cost,energy_cost,machine_cost,print_cost,file_path,file_name,file_size,showcase,showcase_price,showcase_text,photo_path,created_at,updated_at,inventta3d_print_requests(id,customer_id,customer_name,quantity,unit_print_cost,requested_at,quote_id)';
+  const BUCKET='projetotrid-models',MAX_FILE=50*1024*1024,EXT=/\.(stl|3mf)$/i;
+  const COLS='id,name,material,color,weight_g,print_minutes,material_cost,energy_cost,machine_cost,print_cost,file_path,file_name,file_size,showcase,showcase_price,showcase_text,photo_path,created_at,updated_at,projetotrid_print_requests(id,customer_id,customer_name,quantity,unit_print_cost,requested_at,quote_id)';
   const money=new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'});
   const norm=s=>String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
   const digits=s=>String(s||'').replace(/\D/g,'');
@@ -17,22 +17,22 @@
   const r2=n=>Math.round((Number(n)||0)*100)/100;
   let prints=[],loaded=false,current=null,pending=[];
   function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
-  const lastDate=p=>p.inventta3d_print_requests.reduce((m,r)=>r.requested_at>m?r.requested_at:m,p.created_at);
+  const lastDate=p=>p.projetotrid_print_requests.reduce((m,r)=>r.requested_at>m?r.requested_at:m,p.created_at);
 
   async function load(force){
     if(!ready()){prints=[];loaded=false;render();return}
     if(loaded&&!force)return;
     $('printStatus').textContent='Carregando seu histórico…';
-    const{data,error}=await app().client().from('inventta3d_prints').select(COLS).limit(500);
+    const{data,error}=await app().client().from('projetotrid_prints').select(COLS).limit(500);
     if(error){$('printStatus').textContent='Não foi possível carregar o histórico. Atualize a página para tentar novamente.';return}
-    prints=(data||[]).map(p=>({...p,inventta3d_print_requests:p.inventta3d_print_requests||[]}));loaded=true;render();
+    prints=(data||[]).map(p=>({...p,projetotrid_print_requests:p.projetotrid_print_requests||[]}));loaded=true;render();
   }
 
   /* ---------- lista ---------- */
   function render(){
     const list=$('printList'),raw=$('printSearch').value.trim(),q=norm(raw),sort=$('printSort').value||'recent';
-    const rows=prints.filter(p=>!q||norm([p.name,p.material,p.color,...p.inventta3d_print_requests.map(r=>r.customer_name)].join(' ')).includes(q));
-    const by={recent:(a,b)=>lastDate(b).localeCompare(lastDate(a)),name:(a,b)=>a.name.localeCompare(b.name,'pt-BR'),orders:(a,b)=>b.inventta3d_print_requests.length-a.inventta3d_print_requests.length};
+    const rows=prints.filter(p=>!q||norm([p.name,p.material,p.color,...p.projetotrid_print_requests.map(r=>r.customer_name)].join(' ')).includes(q));
+    const by={recent:(a,b)=>lastDate(b).localeCompare(lastDate(a)),name:(a,b)=>a.name.localeCompare(b.name,'pt-BR'),orders:(a,b)=>b.projetotrid_print_requests.length-a.projetotrid_print_requests.length};
     rows.sort(by[sort]||by.recent);list.replaceChildren();
     if(!rows.length){
       const empty=el('div','saved-empty'),icon=el('div','saved-empty-icon');icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg class="icon"><use href="#i-cube"/></svg>';
@@ -42,7 +42,7 @@
       list.append(empty);
     }
     rows.forEach(p=>{
-      const reqs=p.inventta3d_print_requests,names=[...new Set(reqs.map(r=>r.customer_name).filter(Boolean))];
+      const reqs=p.projetotrid_print_requests,names=[...new Set(reqs.map(r=>r.customer_name).filter(Boolean))];
       const row=el('article','saved-quote-row'),info=el('div'),acts=el('div','saved-quote-actions');
       info.append(el('strong','',p.name),el('small','',[p.material+(p.color?` · ${p.color}`:''),fmtG(p.weight_g),fmtTime(p.print_minutes),`${money.format(Number(p.print_cost))} de impressão por peça`].join(' · ')));
       info.append(el('small','',`${reqs.length} pedido${reqs.length===1?'':'s'} · último em ${fmtDate(lastDate(p))}${names.length?' · '+names.join(', '):''}`));
@@ -105,14 +105,14 @@
         const it=pending[cb.dataset.i],file=$('printFile'+cb.dataset.i).files[0];
         const base={name:it.name,material:it.material,color:it.color,weight_g:it.weight_g,print_minutes:it.print_minutes,material_cost:it.material_cost,energy_cost:it.energy_cost,machine_cost:it.machine_cost,print_cost:it.print_cost,updated_at:new Date().toISOString()};
         let print=prints.find(p=>norm(p.name)===norm(it.name)&&norm(p.material)===norm(it.material));
-        const res=print?await c.from('inventta3d_prints').update(base).eq('id',print.id).select(COLS).single():await c.from('inventta3d_prints').insert(base).select(COLS).single();
+        const res=print?await c.from('projetotrid_prints').update(base).eq('id',print.id).select(COLS).single():await c.from('projetotrid_prints').insert(base).select(COLS).single();
         if(res.error)throw res.error;
-        print={...res.data,inventta3d_print_requests:res.data.inventta3d_print_requests||[]};
-        const recent=Date.now()-10*60*1000;if(print.inventta3d_print_requests.some(r=>(quoteId&&r.quote_id===quoteId)||(r.customer_name===cust.name&&r.quantity===it.quantity&&new Date(r.requested_at).getTime()>recent))){dup++}
+        print={...res.data,projetotrid_print_requests:res.data.projetotrid_print_requests||[]};
+        const recent=Date.now()-10*60*1000;if(print.projetotrid_print_requests.some(r=>(quoteId&&r.quote_id===quoteId)||(r.customer_name===cust.name&&r.quantity===it.quantity&&new Date(r.requested_at).getTime()>recent))){dup++}
         else{
-          const rq=await c.from('inventta3d_print_requests').insert({print_id:print.id,customer_id:cust.id,customer_name:cust.name,quote_id:quoteId,quantity:it.quantity,unit_print_cost:it.print_cost}).select('id,customer_id,customer_name,quantity,unit_print_cost,requested_at,quote_id').single();
+          const rq=await c.from('projetotrid_print_requests').insert({print_id:print.id,customer_id:cust.id,customer_name:cust.name,quote_id:quoteId,quantity:it.quantity,unit_print_cost:it.print_cost}).select('id,customer_id,customer_name,quantity,unit_print_cost,requested_at,quote_id').single();
           if(rq.error)throw rq.error;
-          print.inventta3d_print_requests=[...print.inventta3d_print_requests,rq.data];saved++;
+          print.projetotrid_print_requests=[...print.projetotrid_print_requests,rq.data];saved++;
           // ponytail: desconta peso × quantidade, sem a margem de perdas (o histórico guarda o peso por peça)
           if(window.ProjetoTridEstoque)estoqueMsg+=await window.ProjetoTridEstoque.descontar(it.material,it.color,Number(it.weight_g)*it.quantity);
         }
@@ -134,10 +134,10 @@
     const up=await c.storage.from(BUCKET).upload(path,file,{contentType:file.type||'application/octet-stream',upsert:false});
     if(up.error)return null;
     const old=print.file_path;
-    const r=await c.from('inventta3d_prints').update({file_path:path,file_name:file.name,file_size:file.size,updated_at:new Date().toISOString()}).eq('id',print.id).select(COLS).single();
+    const r=await c.from('projetotrid_prints').update({file_path:path,file_name:file.name,file_size:file.size,updated_at:new Date().toISOString()}).eq('id',print.id).select(COLS).single();
     if(r.error){await c.storage.from(BUCKET).remove([path]);return null}
     if(old)await c.storage.from(BUCKET).remove([old]);
-    return{...r.data,inventta3d_print_requests:r.data.inventta3d_print_requests||print.inventta3d_print_requests};
+    return{...r.data,projetotrid_print_requests:r.data.projetotrid_print_requests||print.projetotrid_print_requests};
   }
   async function download(p){
     const{data,error}=await app().client().storage.from(BUCKET).createSignedUrl(p.file_path,60,{download:p.file_name});
@@ -146,10 +146,10 @@
   }
   async function removeFile(p){
     if(!window.confirm(`Remover o arquivo “${p.file_name}”?`))return;
-    const c=app().client(),r=await c.from('inventta3d_prints').update({file_path:null,file_name:null,file_size:null,updated_at:new Date().toISOString()}).eq('id',p.id).select(COLS).single();
+    const c=app().client(),r=await c.from('projetotrid_prints').update({file_path:null,file_name:null,file_size:null,updated_at:new Date().toISOString()}).eq('id',p.id).select(COLS).single();
     if(r.error){$('printDetailMsg').textContent='Não foi possível remover o arquivo.';return}
     await c.storage.from(BUCKET).remove([p.file_path]);
-    replace({...r.data,inventta3d_print_requests:r.data.inventta3d_print_requests||p.inventta3d_print_requests});
+    replace({...r.data,projetotrid_print_requests:r.data.projetotrid_print_requests||p.projetotrid_print_requests});
   }
   /* ---------- biblioteca: orçar de novo uma peça já feita (nome, material, cor, peso e tempo) ---------- */
   function orcarDeNovo(p){
@@ -195,7 +195,7 @@
       if(!up){$('printDetailMsg').textContent='Não foi possível enviar o arquivo. Tente novamente.';return}replace(up)});
     body.append(fh,fbox);
     if(window.ProjetoTridVitrine)body.append(window.ProjetoTridVitrine.secao(p,replace));
-    const reqs=[...p.inventta3d_print_requests].sort((a,b)=>b.requested_at.localeCompare(a.requested_at));
+    const reqs=[...p.projetotrid_print_requests].sort((a,b)=>b.requested_at.localeCompare(a.requested_at));
     body.append(el('h3','',`Pedidos (${reqs.length})`));
     const ul=el('ul','print-requests');
     reqs.forEach(r=>{const li=el('li');li.append(el('strong','',fmtDate(r.requested_at)),el('span','',r.customer_name||'Sem cliente informado'),el('span','',`${r.quantity} un · ${money.format(Number(r.unit_print_cost))} de impressão por peça`));ul.append(li)});
@@ -206,7 +206,7 @@
 
   async function removePrint(p){
     if(!window.confirm(`Excluir “${p.name}” do histórico? Os pedidos registrados nela também serão removidos.`))return;
-    const c=app().client(),{error}=await c.from('inventta3d_prints').delete().eq('id',p.id);
+    const c=app().client(),{error}=await c.from('projetotrid_prints').delete().eq('id',p.id);
     if(error){$('printStatus').textContent='Não foi possível excluir esta impressão.';return}
     if(p.file_path)await c.storage.from(BUCKET).remove([p.file_path]);
     prints=prints.filter(x=>x.id!==p.id);render();if($('printDetailDialog').open)$('printDetailDialog').close();app().status('Impressão excluída do histórico.');
