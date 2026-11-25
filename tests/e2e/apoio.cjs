@@ -20,7 +20,7 @@ function sessao() {
 function bancoFalso() {
   const db = { projetotrid_quotes: [], projetotrid_customers: [], projetotrid_prints: [], projetotrid_print_requests: [], projetotrid_spools: [], projetotrid_printers: [], projetotrid_shop: [] };
   const arquivos = {};
-  const acesso = { status: 'approved' }; // aprovação de acesso: 'approved' | 'pending' | 'blocked'
+  const acesso = { status: 'approved', admin: false, contas: [] }; // aprovação de acesso: 'approved' | 'pending' | 'blocked'; admin e contas: tela "Aprovar acessos"
   let seq = 0;
   const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*', 'access-control-expose-headers': '*' };
   const json = (route, status, corpo) => route.fulfill({ status, headers: { ...cors, 'content-type': 'application/json' }, body: JSON.stringify(corpo) });
@@ -33,6 +33,13 @@ function bancoFalso() {
     if (url.pathname.startsWith('/rest/v1/rpc/')) {
       const corpo = JSON.parse(req.postData() || '{}'), q = db.projetotrid_quotes.find((r) => r.share_token && r.share_token === corpo.p_token);
       if (url.pathname.endsWith('/projetotrid_request_access')) return json(route, 200, acesso.status);
+      if (url.pathname.endsWith('/projetotrid_is_admin')) return json(route, 200, acesso.admin && acesso.status === 'approved');
+      if (url.pathname.endsWith('/projetotrid_access_list')) return acesso.admin ? json(route, 200, acesso.contas) : json(route, 403, { message: 'apenas administradores' });
+      if (url.pathname.endsWith('/projetotrid_access_set')) {
+        const c = acesso.admin && acesso.contas.find((x) => x.email === String(corpo.p_email || '').trim().toLowerCase() && !x.is_me);
+        if (!c) return json(route, 400, { message: 'conta não encontrada' });
+        c.status = corpo.p_status; return json(route, 200, c.status);
+      }
       if (url.pathname.endsWith('/projetotrid_showcase')) {
         const s = db.projetotrid_shop.find((x) => x.enabled && x.slug === String(corpo.p_slug || '').toLowerCase());
         if (!s) return json(route, 200, null);

@@ -73,3 +73,19 @@
 .login-preco-rot{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium)}
 .login-zap{justify-self:start;margin-top:6px;padding:8px 14px;border-radius:var(--shape-control);background:var(--md-ext-whatsapp);color:var(--md-ext-on-whatsapp);font:var(--md-sys-typescale-label-large)}
 .login-footnote{font-size:.875rem}
+
+/* aprovação de acessos (menu da conta → Aprovar acessos; só administradores) */
+.acessos-badge{margin-left:auto;min-width:22px;height:22px;padding:0 6px;border-radius:var(--md-sys-shape-corner-full);background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);font:var(--md-sys-typescale-label-medium);display:inline-grid;place-items:center}
+.acessos-badge[hidden]{display:none}
+.acessos-intro{margin:0 0 12px;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium)}
+.acessos-lista{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.acessos-item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 12px;padding:12px 16px;border:1px solid var(--md-sys-color-outline-variant);border-radius:var(--shape-surface);background:var(--md-sys-color-surface-container-lowest)}
+.acessos-info{display:grid;min-width:0}
+.acessos-email{font:var(--md-sys-typescale-title-medium);overflow-wrap:anywhere}
+.acessos-meta{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small)}
+.acessos-status{justify-self:end;padding:2px 10px;border-radius:var(--md-sys-shape-corner-full);font:var(--md-sys-typescale-label-medium)}
+.acessos-pending{background:var(--md-sys-color-tertiary-container);color:var(--md-sys-color-on-tertiary-container)}
+.acessos-approved{background:var(--md-ext-success-container);color:var(--md-ext-on-success-container)}
+.acessos-blocked{background:var(--md-sys-color-error-container);color:var(--md-sys-color-on-error-container)}
+.acessos-acoes{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}
+.acessos-acoes:empty{display:none}

@@ -35,7 +35,7 @@ test('HTML: ids são únicos', () => {
 
 test('JS: todo id usado nos scripts existe no HTML', () => {
   // ids criados em tempo de execução (ex.: campos de arquivo por item) ficam aqui, com motivo.
-  const dinamicos = new Set(['printView']); // printView: caixa do 3D criada ao abrir o modelo no histórico
+  const dinamicos = new Set(['printView', 'acessosBadge']); // printView: caixa do 3D criada ao abrir o modelo no histórico; acessosBadge: criado com o item "Aprovar acessos" (acessos.js)
   const faltando = [];
   for (const f of ownJs) {
     const src = read(f);

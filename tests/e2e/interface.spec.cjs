@@ -1104,6 +1104,44 @@ test.describe('aprovação de acesso', () => {
     await expect(page.locator('#appShell')).not.toHaveAttribute('inert', '');
   });
 
+  test('administrador aprova e bloqueia contas pelo menu da conta; quem não é administrador não vê a opção', async ({ page }) => {
+    const banco = bancoFalso();
+    banco.acesso.admin = true;
+    banco.acesso.contas = [
+      { email: 'nova@exemplo.com', status: 'pending', requested_at: '2026-11-25T10:00:00Z', decided_at: null, is_admin: false, is_me: false },
+      { email: 'teste@exemplo.com', status: 'approved', requested_at: '2026-11-20T10:00:00Z', decided_at: null, is_admin: true, is_me: true },
+    ];
+    await page.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
+    await page.addInitScript(([chave, valor]) => localStorage.setItem(chave, valor), sessaoDeTeste());
+    await page.goto('/app/');
+    await page.locator('#appShell').waitFor({ state: 'visible' });
+    await page.locator('#accountSignedIn > summary').click();
+    const item = page.locator('#acessosAbrir');
+    await expect(item).toBeVisible();
+    await expect(page.locator('#acessosBadge')).toHaveText('1');
+    await item.click();
+    const dialogo = page.getByRole('dialog', { name: 'Aprovar acessos' });
+    await expect(dialogo).toBeVisible();
+    await expect(dialogo.getByRole('button', { name: 'Aprovar teste@exemplo.com' })).toHaveCount(0);
+    await dialogo.getByRole('button', { name: 'Aprovar nova@exemplo.com' }).click();
+    await expect(dialogo.locator('.acessos-item').first()).toContainText('Aprovado');
+    expect(banco.acesso.contas[0].status).toBe('approved');
+    await dialogo.getByRole('button', { name: 'Bloquear nova@exemplo.com' }).click();
+    await expect(dialogo.locator('.acessos-item').first()).toContainText('Bloqueado');
+    await expect(page.locator('#acessosBadge')).toBeHidden();
+  });
+
+  test('conta comum não vê "Aprovar acessos"', async ({ page }) => {
+    const banco = bancoFalso();
+    await page.route((u) => u.href.startsWith(urlSupabase), banco.tratar);
+    await page.addInitScript(([chave, valor]) => localStorage.setItem(chave, valor), sessaoDeTeste());
+    await page.goto('/app/');
+    await page.locator('#appShell').waitFor({ state: 'visible' });
+    await page.locator('#accountSignedIn > summary').click();
+    await expect(page.locator('#accountSignOut')).toBeVisible();
+    await expect(page.locator('#acessosAbrir')).toBeHidden();
+  });
+
   test('conta bloqueada vê a mensagem de acesso não liberado e pode sair', async ({ page }) => {
     const banco = bancoFalso();
     banco.acesso.status = 'blocked';

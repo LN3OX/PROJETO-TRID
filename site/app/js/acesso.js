@@ -54,7 +54,7 @@
   // tela de login: a peça de demonstração gira ao lado do preço (só no computador, onde a coluna aparece; carrega sob demanda)
   const pecaLogin = document.querySelector('[data-login-peca]');
   if (pecaLogin && matchMedia('(min-width: 900px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const montarPeca = () => { if (getComputedStyle(pecaLogin).display === 'none' || pecaLogin.dataset.pronta) return; pecaLogin.dataset.pronta = '1'; import('/assets/logo3d.js').then((m) => m.criarPeca(pecaLogin, { paleta: 'marca', velocidade: 1.4 })).catch(() => { /* sem a peça, o quadro continua com o preço */ }); };
+    const montarPeca = () => { if (getComputedStyle(pecaLogin).display === 'none' || pecaLogin.dataset.pronta) return; pecaLogin.dataset.pronta = '1'; import('../assets/logo3d.js').then((m) => m.criarPeca(pecaLogin, { paleta: 'marca', velocidade: 1.4 })).catch(() => { /* sem a peça, o quadro continua com o preço */ }); };
     if (document.readyState === 'complete') setTimeout(montarPeca, 300); else window.addEventListener('load', () => setTimeout(montarPeca, 300));
   }
   document.addEventListener('projetotrid:auth', () => { if (app()?.user()) verificar(); else { verificando++; esconder(); } });

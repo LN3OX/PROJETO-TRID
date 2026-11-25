@@ -1,4 +1,4 @@
-const CACHE_NAME='projetotrid-v106';
+const CACHE_NAME='projetotrid-v107';
 const KIRI_CACHE='projetotrid-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
 const APP_SHELL=[
   './',
@@ -34,6 +34,7 @@ const APP_SHELL=[
   './js/modules.js',
   './js/shell.js',
   './js/app.js',
+  './js/acessos.js',
   './js/orcamentos-ui.js',
   './js/clientes.js',
   './js/impressoes.js',
