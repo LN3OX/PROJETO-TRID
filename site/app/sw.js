@@ -1,4 +1,4 @@
-const CACHE_NAME='projetotrid-v102';
+const CACHE_NAME='projetotrid-v103';
 const KIRI_CACHE='projetotrid-kiri-4.7.3'; // motor de fatiamento (~9 MB): baixado só no primeiro uso e mantido entre versões do site
 const APP_SHELL=[
   './',
@@ -61,7 +61,7 @@ self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('precifica3d-')||key.startsWith('projetotrid-'))&&key!==CACHE_NAME&&key!==KIRI_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
+  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>(key.startsWith('precifica3d-')||key.startsWith('inventta3d-')||key.startsWith('projetotrid-'))&&key!==CACHE_NAME&&key!==KIRI_CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
 });
 self.addEventListener('fetch',event=>{
   const request=event.request;

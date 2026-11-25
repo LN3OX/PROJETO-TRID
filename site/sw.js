@@ -3,7 +3,7 @@
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => {
   event.waitUntil((async () => {
-    for (const k of await caches.keys()) if (/^(projetotrid|precifica3d)-/.test(k)) await caches.delete(k);
+    for (const k of await caches.keys()) if (/^(projetotrid|inventta3d|precifica3d)-/.test(k)) await caches.delete(k);
     await self.registration.unregister();
     for (const c of await self.clients.matchAll({ type: 'window' })) c.navigate(c.url);
   })());
